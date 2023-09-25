@@ -3,7 +3,7 @@ package videos
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/lncitador/alura-flix-backend/config"
-	"github.com/lncitador/alura-flix-backend/internal/application/repositories"
+	"github.com/lncitador/alura-flix-backend/internal/application/repositories/impl"
 	"github.com/lncitador/alura-flix-backend/internal/application/usecases"
 )
 
@@ -15,7 +15,7 @@ type VideoHandlers struct {
 func NewVideoHandlers(config *config.Config) *VideoHandlers {
 	db := config.GetDb()
 
-	repo := repositories.NewVideoRepository(db)
+	repo := impl.NewVideoRepository(db)
 	useCase := usecases.NewVideosUseCase(repo)
 
 	return &VideoHandlers{
