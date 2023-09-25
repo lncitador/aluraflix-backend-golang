@@ -1,6 +1,8 @@
 package inmemory
 
 import (
+	"errors"
+	e "github.com/lncitador/alura-flix-backend/internal/application/repositories/errors"
 	"github.com/lncitador/alura-flix-backend/internal/domain"
 	vo "github.com/lncitador/alura-flix-backend/internal/domain/value-objects"
 )
@@ -18,18 +20,25 @@ func (r *CategoriaRepository) FindAll() ([]domain.Categoria, error) {
 }
 
 func (r *CategoriaRepository) FindById(id *vo.UniqueEntityID) (*domain.Categoria, error) {
+	if id == nil {
+		return nil, errors.New(e.ErrCategoriaIdIsNull)
+	}
+
 	for _, categoria := range r.db {
 		if categoria.ID.Equals(id) {
 			return &categoria, nil
 		}
 	}
 
-	return nil, nil
+	return nil, errors.New(e.ErrFindByIdCategoria)
 }
 
 func (r *CategoriaRepository) Create(data domain.Categoria) error {
-	r.db = append(r.db, data)
+	if _, err := r.FindById(data.ID); err == nil {
+		return errors.New(e.ErrCategoriaAlreadyExists)
+	}
 
+	r.db = append(r.db, data)
 	return nil
 }
 
@@ -42,7 +51,7 @@ func (r *CategoriaRepository) Update(data domain.Categoria) error {
 		}
 	}
 
-	return nil
+	return errors.New(e.ErrUpdateCategoria)
 }
 
 func (r *CategoriaRepository) Delete(id *vo.UniqueEntityID) error {
@@ -54,5 +63,5 @@ func (r *CategoriaRepository) Delete(id *vo.UniqueEntityID) error {
 		}
 	}
 
-	return nil
+	return errors.New(e.ErrDeleteCategoria)
 }
