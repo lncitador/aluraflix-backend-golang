@@ -1,7 +1,6 @@
 ### Get all videos
 GET {{base_url}}/videos
 
-
 ### Get a video
 GET {{base_url}}/videos/764b94a1-5925-43b9-a818-7f1562d03857
 
