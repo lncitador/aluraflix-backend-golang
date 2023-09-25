@@ -16,8 +16,14 @@ func NewVideoRepository(db *gorm.DB) *VideoRepository {
 	return &VideoRepository{db}
 }
 
-func (r VideoRepository) FindAll() ([]domain.Video, error) {
+func (r VideoRepository) FindAll(query domain.VideoQuery) ([]domain.Video, error) {
 	var videos []domain.Video
+
+	if search := query.Search(); search != nil {
+		r.db = r.db.Where("title LIKE ?", search)
+		r.db = r.db.Or("description LIKE ?", search)
+	}
+
 	if err := r.db.Find(&videos).Error; err != nil {
 		return nil, err
 	}
