@@ -33,5 +33,6 @@ func (h CategoriaHandlers) Register() {
 		categorias.GET("/:id", h.show)
 		categorias.POST("/", h.create)
 		categorias.PUT("/:id", h.update)
+		categorias.DELETE("/:id", h.delete)
 	}
 }
