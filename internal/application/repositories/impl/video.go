@@ -26,6 +26,10 @@ func (r VideoRepository) FindAll() ([]domain.Video, error) {
 }
 
 func (r VideoRepository) FindById(id *v.UniqueEntityID) (*domain.Video, error) {
+	if id == nil {
+		return nil, errors.New(e.ErrVideoIdIsNull)
+	}
+
 	var video domain.Video
 	if err := r.db.First(&video, id).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -55,6 +59,10 @@ func (r VideoRepository) Update(data domain.Video) error {
 }
 
 func (r VideoRepository) Delete(id *v.UniqueEntityID) error {
+	if id == nil {
+		return errors.New(e.ErrVideoIdIsNull)
+	}
+
 	if err := r.db.Delete(&domain.Video{}, id).Error; err != nil {
 		return err
 	}
