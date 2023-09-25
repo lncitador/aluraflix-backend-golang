@@ -15,7 +15,7 @@ func NewCategoriaRepository() *CategoriaRepository {
 	return &CategoriaRepository{}
 }
 
-func (r *CategoriaRepository) FindAll() ([]domain.Categoria, error) {
+func (r *CategoriaRepository) FindAll(query domain.VideoQuery) ([]domain.Categoria, error) {
 	return r.db, nil
 }
 
