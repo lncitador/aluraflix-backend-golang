@@ -5,10 +5,11 @@ import (
 	"github.com/lncitador/alura-flix-backend/internal/domain"
 	vo "github.com/lncitador/alura-flix-backend/internal/domain/value-objects"
 	"github.com/stretchr/testify/assert"
+	"log"
 	"testing"
 )
 
-type Sut struct {
+type VideoSut struct {
 	repo      *inmemory.VideoRepository
 	useCase   *VideosUseCase
 	constants domain.VideoInput
@@ -16,27 +17,44 @@ type Sut struct {
 
 var invalidUrl = "www.youtube"
 
-func setupSut() *Sut {
-	repo := inmemory.NewVideoRepository()
+func setupVideoSut() *VideoSut {
+	relation := inmemory.NewCategoriaRepository()
+	repo := inmemory.NewVideoRepository(relation)
+
 	useCase := NewVideosUseCase(repo)
 
 	titulo := "Título do vídeo"
 	descricao := "Descrição do vídeo"
 	url := "https://www.youtube.com/watch?v=123456789"
 
-	return &Sut{
+	name := "Nome da categoria"
+	hexColor := "#FFFFFF"
+
+	categoria, _ := domain.NewCategoria(domain.CategoriaInput{
+		Name:  &name,
+		Color: &hexColor,
+	})
+
+	categoriaId := categoria.ID.ToString()
+
+	if err := relation.Create(*categoria); err != nil {
+		log.Fatal(err)
+	}
+
+	return &VideoSut{
 		repo:    repo,
 		useCase: useCase,
 		constants: domain.VideoInput{
 			Title:       &titulo,
 			Description: &descricao,
 			URL:         &url,
+			CategoriaID: &categoriaId,
 		},
 	}
 }
 
 func TestVideosUseCase_Create(t *testing.T) {
-	sut := setupSut()
+	sut := setupVideoSut()
 	data := sut.constants
 
 	t.Run("should create a video", func(t *testing.T) {
@@ -76,7 +94,7 @@ func TestVideosUseCase_Create(t *testing.T) {
 }
 
 func TestVideosUseCase_Delete(t *testing.T) {
-	sut := setupSut()
+	sut := setupVideoSut()
 
 	t.Run("should delete a video", func(t *testing.T) {
 		video, err := sut.useCase.Create(sut.constants)
@@ -96,7 +114,7 @@ func TestVideosUseCase_Delete(t *testing.T) {
 }
 
 func TestVideosUseCase_FindAll(t *testing.T) {
-	sut := setupSut()
+	sut := setupVideoSut()
 
 	t.Run("should find all videos", func(t *testing.T) {
 		videos, err := sut.useCase.FindAll()
@@ -106,7 +124,7 @@ func TestVideosUseCase_FindAll(t *testing.T) {
 }
 
 func TestVideosUseCase_FindById(t *testing.T) {
-	sut := setupSut()
+	sut := setupVideoSut()
 
 	t.Run("should find a video by id", func(t *testing.T) {
 		video, err := sut.useCase.Create(sut.constants)
@@ -136,7 +154,7 @@ func TestVideosUseCase_FindById(t *testing.T) {
 }
 
 func TestVideosUseCase_Update(t *testing.T) {
-	sut := setupSut()
+	sut := setupVideoSut()
 
 	t.Run("should update a video", func(t *testing.T) {
 		video, err := sut.useCase.Create(sut.constants)
