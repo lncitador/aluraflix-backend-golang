@@ -23,3 +23,15 @@ func NewVideoHandlers(config *config.Config) *VideoHandlers {
 		useCase: useCase,
 	}
 }
+
+func (h VideoHandlers) Register() {
+	v1 := h.router.Group("/api/v1")
+	videos := v1.Group("/videos")
+	{
+		videos.GET("/", h.index)
+		videos.GET("/:id", h.show)
+		videos.POST("/", h.create)
+		videos.PUT("/:id", h.update)
+		videos.DELETE("/:id", h.delete)
+	}
+}
