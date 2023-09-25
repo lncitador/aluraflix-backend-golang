@@ -8,7 +8,9 @@ import (
 	"gorm.io/gorm"
 )
 
-type VideoRepository Repository
+type VideoRepository struct {
+	db *gorm.DB
+}
 
 func NewVideoRepository(db *gorm.DB) *VideoRepository {
 	return &VideoRepository{db}
