@@ -8,16 +8,18 @@ import (
 	vo "github.com/lncitador/alura-flix-backend/internal/domain/value-objects"
 )
 
+type VideoRepositoryContract repositories.RepositoryContract[domain.Video]
+
 type VideosUseCase struct {
-	videoRepository *repositories.VideoRepository
+	VideoRepositoryContract
 }
 
-func NewVideosUseCase(videoRepository *repositories.VideoRepository) *VideosUseCase {
-	return &VideosUseCase{videoRepository}
+func NewVideosUseCase(contract VideoRepositoryContract) *VideosUseCase {
+	return &VideosUseCase{contract}
 }
 
 func (v VideosUseCase) FindAll() (*[]domain.VideoDto, error) {
-	videos, err := v.videoRepository.FindAll()
+	videos, err := v.VideoRepositoryContract.FindAll()
 	if err != nil {
 		return nil, err
 	}
@@ -26,7 +28,7 @@ func (v VideosUseCase) FindAll() (*[]domain.VideoDto, error) {
 }
 
 func (v VideosUseCase) FindById(id *vo.UniqueEntityID) (*domain.VideoDto, error) {
-	video, err := v.videoRepository.FindById(id)
+	video, err := v.VideoRepositoryContract.FindById(id)
 	if err != nil {
 		return nil, err
 	}
@@ -40,7 +42,7 @@ func (v VideosUseCase) Create(data domain.VideoInput) (*domain.VideoDto, error) 
 		return nil, err
 	}
 
-	if err := v.videoRepository.Create(*video); err != nil {
+	if err := v.VideoRepositoryContract.Create(*video); err != nil {
 		return nil, err
 	}
 
@@ -48,7 +50,7 @@ func (v VideosUseCase) Create(data domain.VideoInput) (*domain.VideoDto, error) 
 }
 
 func (v VideosUseCase) Update(id *vo.UniqueEntityID, data domain.VideoInput) (*domain.VideoDto, error) {
-	video, err := v.videoRepository.FindById(id)
+	video, err := v.VideoRepositoryContract.FindById(id)
 	if err != nil {
 		return nil, fmt.Errorf(errors.ErrFindByIdVideo)
 	}
@@ -57,7 +59,7 @@ func (v VideosUseCase) Update(id *vo.UniqueEntityID, data domain.VideoInput) (*d
 		return nil, err
 	}
 
-	if err := v.videoRepository.Update(*video); err != nil {
+	if err := v.VideoRepositoryContract.Update(*video); err != nil {
 		return nil, err
 	}
 
@@ -65,7 +67,7 @@ func (v VideosUseCase) Update(id *vo.UniqueEntityID, data domain.VideoInput) (*d
 }
 
 func (v VideosUseCase) Delete(id *vo.UniqueEntityID) error {
-	if err := v.videoRepository.Delete(id); err != nil {
+	if err := v.VideoRepositoryContract.Delete(id); err != nil {
 		return err
 	}
 
