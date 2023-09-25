@@ -8,24 +8,29 @@ import (
 
 type Video struct {
 	Base
-	Title       string  `gorm:"type:varchar(255);not null"`
-	Description string  `gorm:"type:varchar(255);not null"`
-	URL         *vo.URL `gorm:"type:varchar(255);not null"`
+	Title       string             `gorm:"type:varchar(255);not null"`
+	Description string             `gorm:"type:varchar(255);not null"`
+	URL         *vo.URL            `gorm:"type:varchar(255);not null;index"`
+	CategoriaID *vo.UniqueEntityID `gorm:"type:uuid, not null;index"`
+	Categoria   *Categoria         `gorm:"foreignKey:CategoriaID"`
 }
 
 type VideoDto struct {
-	ID          string    `json:"id"`
-	Title       string    `json:"title"`
-	Description string    `json:"description"`
-	URL         string    `json:"url"`
-	CreatedAt   time.Time `json:"createdAt"`
-	UpdatedAt   time.Time `json:"updatedAt"`
+	ID          string     `json:"id"`
+	Title       string     `json:"title"`
+	Description string     `json:"description"`
+	URL         string     `json:"url"`
+	CategoriaID string     `json:"categoriaId"`
+	Categoria   *Categoria `json:"categoria,omitempty"`
+	CreatedAt   time.Time  `json:"createdAt"`
+	UpdatedAt   time.Time  `json:"updatedAt"`
 }
 
 type VideoInput struct {
 	Title       *string `json:"title" validate:"required,min=8,max=255"`
 	Description *string `json:"description" validate:"required,min=8,max=255"`
 	URL         *string `json:"url" validate:"required,url"`
+	CategoriaID *string `json:"categoriaId" validate:"required,uuid4"`
 }
 
 func (i VideoInput) validate() error {
@@ -64,6 +69,8 @@ func (v *Video) MapTo() *VideoDto {
 		Title:       v.Title,
 		Description: v.Description,
 		URL:         v.URL.ToString(),
+		CategoriaID: v.CategoriaID.ToString(),
+		Categoria:   v.Categoria,
 		CreatedAt:   v.CreatedAt,
 		UpdatedAt:   v.UpdatedAt,
 	}
@@ -97,6 +104,14 @@ func (v *Video) Fill(input VideoInput) error {
 		v.URL = newUrl
 	}
 
+	if input.CategoriaID != nil {
+		categoriaId, err := vo.NewUniqueEntityID(input.CategoriaID)
+		if err != nil {
+			return err
+		}
+		v.CategoriaID = categoriaId
+	}
+
 	return nil
 }
 
@@ -128,5 +143,17 @@ func (d VideoDto) MapFrom() (*Video, error) {
 		UpdatedAt: d.UpdatedAt,
 	}
 
-	return &Video{base, d.Title, d.Description, newUrl}, nil
+	categoriaId, err := vo.NewUniqueEntityID(&d.CategoriaID)
+	if err != nil {
+		return nil, err
+	}
+
+	return &Video{
+		Base:        base,
+		Title:       d.Title,
+		Description: d.Description,
+		URL:         newUrl,
+		CategoriaID: categoriaId,
+		Categoria:   d.Categoria,
+	}, nil
 }
