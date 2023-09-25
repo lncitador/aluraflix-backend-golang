@@ -9,7 +9,7 @@ import (
 type Categoria struct {
 	Base
 	Name  string `gorm:"type:varchar(255);not null"`
-	Color string `gorm:"type:varchar(6);not null"`
+	Color string `gorm:"type:varchar(7);not null"`
 }
 
 type CategoriaDto struct {
@@ -21,8 +21,8 @@ type CategoriaDto struct {
 }
 
 type CategoriaInput struct {
-	Name  *string `json:"nome" validate:"required,min=8,max=255"`
-	Color *string `json:"cor" validate:"required,min=7,max=7,hexcolor"`
+	Name  *string `json:"name" validate:"required,min=8,max=255"`
+	Color *string `json:"color" validate:"required,min=7,max=7,hexcolor"`
 }
 
 func (i CategoriaInput) validate() error {
