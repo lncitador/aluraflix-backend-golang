@@ -22,7 +22,7 @@ type CategoriaDto struct {
 
 type CategoriaInput struct {
 	Name  *string `json:"nome" validate:"required,min=8,max=255"`
-	Color *string `json:"cor" validate:"required,min=6,max=6,hexcolor"`
+	Color *string `json:"cor" validate:"required,min=7,max=7,hexcolor"`
 }
 
 func (i CategoriaInput) validate() error {
