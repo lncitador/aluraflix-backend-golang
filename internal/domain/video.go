@@ -58,22 +58,31 @@ func NewVideo(input VideoInput) (*Video, error) {
 	video.Title = *input.Title
 	video.Description = *input.Description
 	video.URL = newUrl
+	video.CategoriaID, err = vo.NewUniqueEntityID(input.CategoriaID)
+	if err != nil {
+		return nil, err
+	}
 
 	return &video, nil
 }
 
 // MapTo maps Video to VideoDto struct
 func (v *Video) MapTo() *VideoDto {
-	return &VideoDto{
+	video := &VideoDto{
 		ID:          v.ID.ToString(),
 		Title:       v.Title,
 		Description: v.Description,
 		URL:         v.URL.ToString(),
 		CategoriaID: v.CategoriaID.ToString(),
-		Categoria:   v.Categoria,
 		CreatedAt:   v.CreatedAt,
 		UpdatedAt:   v.UpdatedAt,
 	}
+
+	if v.Categoria != nil {
+		video.Categoria = v.Categoria
+	}
+
+	return video
 }
 
 func (v *Video) Fill(input VideoInput) error {
