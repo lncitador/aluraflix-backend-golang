@@ -30,5 +30,6 @@ func (h CategoriaHandlers) Register() {
 	categorias := h.router.Group("/categorias")
 	{
 		categorias.GET("/", h.index)
+		categorias.GET("/:id", h.show)
 	}
 }
