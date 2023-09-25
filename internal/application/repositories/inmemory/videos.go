@@ -17,7 +17,7 @@ func NewVideoRepository(relation *CategoriaRepository) *VideoRepository {
 	return &VideoRepository{db, relation}
 }
 
-func (r *VideoRepository) FindAll() ([]domain.Video, error) {
+func (r *VideoRepository) FindAll(query domain.VideoQuery) ([]domain.Video, error) {
 	return r.db, nil
 }
 
@@ -40,7 +40,7 @@ func (r *VideoRepository) Create(data domain.Video) error {
 		return errors.New(e.ErrVideoAlreadyExists)
 	}
 
-	if _, err := r.relation.FindById(data.CategoriaID); err != nil {
+	if _, err := r.relation.FindById(data.CategoryID); err != nil {
 		return errors.New(e.ErrCategoriaNotFound)
 	}
 
