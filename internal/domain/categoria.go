@@ -25,6 +25,8 @@ type CategoriaInput struct {
 	Color *string `json:"color" validate:"required,min=7,max=7,hexcolor"`
 }
 
+type CategoriaQuery struct{}
+
 func (i CategoriaInput) validate() error {
 	if err := validate.Struct(i); err != nil {
 		return err
