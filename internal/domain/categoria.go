@@ -2,8 +2,6 @@ package domain
 
 import (
 	"github.com/go-playground/validator/v10"
-	vo "github.com/lncitador/alura-flix-backend/internal/domain/value-objects"
-	"time"
 )
 
 type Categoria struct {
@@ -12,28 +10,7 @@ type Categoria struct {
 	Color string `gorm:"type:varchar(7);not null"`
 }
 
-type CategoriaDto struct {
-	ID        string    `json:"id"`
-	Name      string    `json:"name"`
-	Color     string    `json:"color"`
-	CreatedAt time.Time `json:"createdAt"`
-	UpdatedAt time.Time `json:"updatedAt"`
-}
-
-type CategoriaInput struct {
-	Name  *string `json:"name" validate:"required,min=8,max=255"`
-	Color *string `json:"color" validate:"required,min=7,max=7,hexcolor"`
-}
-
 type CategoriaQuery struct{}
-
-func (i CategoriaInput) validate() error {
-	if err := validate.Struct(i); err != nil {
-		return err
-	}
-
-	return nil
-}
 
 // NewCategoria creates a new Categoria instance
 func NewCategoria(input CategoriaInput) (*Categoria, error) {
@@ -83,31 +60,4 @@ func (c *Categoria) Fill(input CategoriaInput) error {
 	}
 
 	return nil
-}
-
-// CategoriasToDto maps a slice of Categoria to a slice of CategoriaDto
-func CategoriasToDto(categorias []Categoria) *[]CategoriaDto {
-	var categoriasDto []CategoriaDto
-
-	for _, categoria := range categorias {
-		categoriasDto = append(categoriasDto, *categoria.MapTo())
-	}
-
-	return &categoriasDto
-}
-
-// MapFrom maps CategoriaDto to Categoria struct
-func (d CategoriaDto) MapFrom() (*Categoria, error) {
-	id, err := vo.NewUniqueEntityID(&d.ID)
-	if err != nil {
-		return nil, err
-	}
-
-	base := Base{
-		ID:        id,
-		CreatedAt: d.CreatedAt,
-		UpdatedAt: d.UpdatedAt,
-	}
-
-	return &Categoria{base, d.Name, d.Color}, nil
 }
