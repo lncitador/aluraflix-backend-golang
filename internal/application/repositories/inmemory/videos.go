@@ -8,11 +8,13 @@ import (
 )
 
 type VideoRepository struct {
-	db []domain.Video
+	db       []domain.Video
+	relation *CategoriaRepository
 }
 
-func NewVideoRepository() *VideoRepository {
-	return &VideoRepository{}
+func NewVideoRepository(relation *CategoriaRepository) *VideoRepository {
+	var db []domain.Video
+	return &VideoRepository{db, relation}
 }
 
 func (r *VideoRepository) FindAll() ([]domain.Video, error) {
@@ -20,6 +22,10 @@ func (r *VideoRepository) FindAll() ([]domain.Video, error) {
 }
 
 func (r *VideoRepository) FindById(id *v.UniqueEntityID) (*domain.Video, error) {
+	if id == nil {
+		return nil, errors.New(e.ErrVideoIdIsNull)
+	}
+
 	for _, video := range r.db {
 		if video.ID.Equals(id) {
 			return &video, nil
@@ -30,6 +36,14 @@ func (r *VideoRepository) FindById(id *v.UniqueEntityID) (*domain.Video, error) 
 }
 
 func (r *VideoRepository) Create(data domain.Video) error {
+	if _, err := r.FindById(data.ID); err == nil {
+		return errors.New(e.ErrVideoAlreadyExists)
+	}
+
+	if _, err := r.relation.FindById(data.CategoriaID); err != nil {
+		return errors.New(e.ErrCategoriaNotFound)
+	}
+
 	r.db = append(r.db, data)
 
 	return nil
