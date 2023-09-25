@@ -31,5 +31,6 @@ func (h CategoriaHandlers) Register() {
 	{
 		categorias.GET("/", h.index)
 		categorias.GET("/:id", h.show)
+		categorias.POST("/", h.create)
 	}
 }
