@@ -48,7 +48,7 @@ func setupVideoSut() *VideoSut {
 			Title:       &titulo,
 			Description: &descricao,
 			URL:         &url,
-			CategoriaID: &categoriaId,
+			CategoryID:  &categoriaId,
 		},
 	}
 }
@@ -117,7 +117,15 @@ func TestVideosUseCase_FindAll(t *testing.T) {
 	sut := setupVideoSut()
 
 	t.Run("should find all videos", func(t *testing.T) {
-		videos, err := sut.useCase.FindAll()
+		videos, err := sut.useCase.FindAll(domain.VideoQuery{})
+		assert.Nil(t, err)
+		assert.NotNil(t, videos)
+	})
+
+	t.Run("should find all videos with search", func(t *testing.T) {
+		var query domain.VideoQuery
+		query.SetSearch("Título")
+		videos, err := sut.useCase.FindAll(query)
 		assert.Nil(t, err)
 		assert.NotNil(t, videos)
 	})
