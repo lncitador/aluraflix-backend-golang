@@ -105,3 +105,20 @@ func TestVideoQuery_SetLimit(t *testing.T) {
 		assert.EqualError(t, err, "limit must be less than 100")
 	})
 }
+
+func TestVideoQuery_SetTotal(t *testing.T) {
+	t.Run("should set total value from query", func(t *testing.T) {
+		q := &VideoQuery{}
+		q.SetTotal(10)
+
+		assert.Equal(t, int64(10), *q.total)
+	})
+}
+
+func TestVideoQuery_Total(t *testing.T) {
+	t.Run("should return total value from query", func(t *testing.T) {
+		value := int64(10)
+		q := &VideoQuery{total: &value}
+		assert.Equal(t, &value, q.Total())
+	})
+}
