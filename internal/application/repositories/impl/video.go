@@ -16,12 +16,17 @@ func NewVideoRepository(db *gorm.DB) *VideoRepository {
 	return &VideoRepository{db}
 }
 
-func (r VideoRepository) FindAll(query domain.VideoQuery) ([]domain.Video, error) {
+func (r VideoRepository) FindAll(query *domain.VideoQuery) ([]domain.Video, error) {
 	var videos []domain.Video
 
 	if search := query.Search(); search != nil {
 		r.db = r.db.Where("title LIKE ?", search)
 		r.db = r.db.Or("description LIKE ?", search)
+	}
+
+	if page := query.Page(); page != nil {
+		limit := 10
+		r.db = r.db.Limit(limit).Offset((*page - 1) * 10)
 	}
 
 	if err := r.db.Find(&videos).Error; err != nil {
