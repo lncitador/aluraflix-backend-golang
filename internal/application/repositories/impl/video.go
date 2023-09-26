@@ -26,6 +26,7 @@ func (r VideoRepository) FindAll(query *domain.VideoQuery) ([]domain.Video, erro
 
 	if page := query.Page(); page != nil {
 		limit := *query.Limit()
+		r.db.Model(&domain.Video{}).Count(query.Total())
 		r.db = r.db.Limit(limit).Offset((*page - 1) * limit)
 	}
 
