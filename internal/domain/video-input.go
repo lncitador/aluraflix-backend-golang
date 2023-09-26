@@ -21,14 +21,16 @@ func (i *VideoInput) prepare() {
 	if i.URL != nil {
 		*i.URL = strings.ToLower(strings.TrimSpace(*i.URL))
 	}
+
+	if i.CategoryID != nil {
+		*i.CategoryID = strings.ToLower(strings.TrimSpace(*i.CategoryID))
+	}
 }
 
 func (i *VideoInput) validate() error {
 	if err := validate.Struct(i); err != nil {
 		return err
 	}
-
-	i.prepare()
 
 	return nil
 }
