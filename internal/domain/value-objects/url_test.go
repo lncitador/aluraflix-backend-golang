@@ -1,33 +1,20 @@
 package value_objects
 
 import (
-	"reflect"
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
 func TestNewURL(t *testing.T) {
-	type args struct {
-		value string
-	}
-	tests := []struct {
-		name    string
-		args    args
-		want    *URL
-		wantErr bool
-	}{
-		{"URL válida", args{value: "https://www.google.com"}, &URL{value: "https://www.google.com"}, false},
-		{"URL inválida", args{value: "www.google.com"}, nil, true},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got, err := NewURL(tt.args.value)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("NewURL() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("NewURL() got = %v, want %v", got, tt.want)
-			}
-		})
-	}
+	t.Run("should create a new url", func(t *testing.T) {
+		url, err := NewURL("https://www.youtube.com/watch?v=123456789")
+		assert.Nil(t, err)
+		assert.NotNil(t, url)
+	})
+
+	t.Run("should not create a new url with invalid url", func(t *testing.T) {
+		url, err := NewURL("www.youtube")
+		assert.NotNil(t, err)
+		assert.Nil(t, url)
+	})
 }

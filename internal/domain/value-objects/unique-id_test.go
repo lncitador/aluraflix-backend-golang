@@ -2,39 +2,29 @@ package value_objects
 
 import (
 	"github.com/google/uuid"
-	"reflect"
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
 func TestNewUniqueEntityID(t *testing.T) {
-	type args struct {
-		value *string
-	}
-
 	uid := uuid.New()
 	uidStr := uid.String()
 	idInvalido := "id inválido"
 
-	tests := []struct {
-		name    string
-		args    args
-		want    *UniqueEntityID
-		wantErr bool
-	}{
-		{"Novo Id", args{value: nil}, nil, false},
-		{"ID válido", args{value: &uidStr}, &UniqueEntityID{value: uid}, false},
-		{"ID inválido", args{value: &idInvalido}, nil, true},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got, err := NewUniqueEntityID(tt.args.value)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("NewUniqueEntityID() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if tt.want != nil && !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("NewUniqueEntityID() got = %v, want %v", got, tt.want)
-			}
-		})
-	}
+	t.Run("should create a new unique entity id", func(t *testing.T) {
+		id, err := NewUniqueEntityID(nil)
+		assert.Nil(t, err)
+		assert.NotNil(t, id)
+	})
+
+	t.Run("should not create a new unique entity id with invalid id", func(t *testing.T) {
+		id, err := NewUniqueEntityID(&idInvalido)
+		assert.NotNil(t, err)
+		assert.Nil(t, id)
+	})
+
+	t.Run("should be able to convert a unique entity id to string", func(t *testing.T) {
+		id, _ := NewUniqueEntityID(&uidStr)
+		assert.Equal(t, uidStr, id.ToString())
+	})
 }
