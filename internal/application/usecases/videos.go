@@ -8,7 +8,7 @@ import (
 	vo "github.com/lncitador/alura-flix-backend/internal/domain/value-objects"
 )
 
-type VideoRepositoryContract repositories.RepositoryContract[domain.Video, domain.VideoQuery]
+type VideoRepositoryContract repositories.RepositoryContract[domain.Video, *domain.VideoQuery]
 
 type VideosUseCase struct {
 	VideoRepositoryContract
@@ -19,7 +19,7 @@ func NewVideosUseCase(contract VideoRepositoryContract) *VideosUseCase {
 }
 
 func (v VideosUseCase) FindAll(query domain.VideoQuery) (*[]domain.VideoDto, error) {
-	videos, err := v.VideoRepositoryContract.FindAll(query)
+	videos, err := v.VideoRepositoryContract.FindAll(&query)
 	if err != nil {
 		return nil, err
 	}
