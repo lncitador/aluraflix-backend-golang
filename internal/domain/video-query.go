@@ -73,6 +73,11 @@ func (q *VideoQuery) Limit() *int {
 }
 
 func (q *VideoQuery) Total() *int64 {
+	if q.total == nil {
+		total := int64(0)
+		q.total = &total
+	}
+
 	return q.total
 }
 
