@@ -16,10 +16,22 @@ func (h VideoHandlers) index(c *gin.Context) {
 		return
 	}
 
-	videos, err := h.useCase.FindAll(query)
+	videos, err := h.useCase.FindAll(&query)
 
 	if err != nil {
 		c.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
+
+	if query.Page() != nil {
+		pagination := domain.Pagination[domain.VideoDto]{}
+
+		if err := pagination.Paginate(c.Request.URL.String(), videos, &query); err != nil {
+			c.JSON(500, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(200, pagination)
 		return
 	}
 
