@@ -24,7 +24,6 @@ func (q *VideoQuery) Search() *string {
 }
 
 func (q *VideoQuery) SetPage(value string) error {
-	page := 1
 	if value != "" {
 		if page, err := strconv.Atoi(value); err != nil {
 			return fmt.Errorf("page must be a number")
@@ -37,16 +36,9 @@ func (q *VideoQuery) SetPage(value string) error {
 		}
 	}
 
-	q.page = &page
-
 	return nil
 }
 
 func (q *VideoQuery) Page() *int {
-	if q.page == nil {
-		page := 1
-		q.page = &page
-	}
-
 	return q.page
 }
