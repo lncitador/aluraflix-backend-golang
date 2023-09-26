@@ -14,10 +14,10 @@ func (i *CategoriaInput) prepare() {
 }
 
 func (i *CategoriaInput) validate() error {
+	i.prepare()
 	if err := validate.Struct(i); err != nil {
 		return err
 	}
-	i.prepare()
 
 	return nil
 }
