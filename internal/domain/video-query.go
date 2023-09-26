@@ -10,6 +10,7 @@ type VideoQuery struct {
 	search *string
 	page   *int
 	limit  *int
+	total  *int64
 }
 
 func (q *VideoQuery) SetSearch(value string) {
@@ -69,4 +70,12 @@ func (q *VideoQuery) Limit() *int {
 	}
 
 	return q.limit
+}
+
+func (q *VideoQuery) Total() *int64 {
+	return q.total
+}
+
+func (q *VideoQuery) SetTotal(value int64) {
+	q.total = &value
 }
