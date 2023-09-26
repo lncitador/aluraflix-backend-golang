@@ -115,17 +115,17 @@ func TestVideosUseCase_Delete(t *testing.T) {
 
 func TestVideosUseCase_FindAll(t *testing.T) {
 	sut := setupVideoSut()
+	query := domain.VideoQuery{}
 
 	t.Run("should find all videos", func(t *testing.T) {
-		videos, err := sut.useCase.FindAll(domain.VideoQuery{})
+		videos, err := sut.useCase.FindAll(&query)
 		assert.Nil(t, err)
 		assert.NotNil(t, videos)
 	})
 
 	t.Run("should find all videos with search", func(t *testing.T) {
-		var query domain.VideoQuery
 		query.SetSearch("Título")
-		videos, err := sut.useCase.FindAll(query)
+		videos, err := sut.useCase.FindAll(&query)
 		assert.Nil(t, err)
 		assert.NotNil(t, videos)
 	})
