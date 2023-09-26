@@ -28,6 +28,8 @@ func (i *VideoInput) prepare() {
 }
 
 func (i *VideoInput) validate() error {
+	i.prepare()
+
 	if err := validate.Struct(i); err != nil {
 		return err
 	}
