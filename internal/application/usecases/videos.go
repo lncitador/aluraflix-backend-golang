@@ -18,8 +18,8 @@ func NewVideosUseCase(contract VideoRepositoryContract) *VideosUseCase {
 	return &VideosUseCase{contract}
 }
 
-func (v VideosUseCase) FindAll(query domain.VideoQuery) (*[]domain.VideoDto, error) {
-	videos, err := v.VideoRepositoryContract.FindAll(&query)
+func (v VideosUseCase) FindAll(query *domain.VideoQuery) (*[]domain.VideoDto, error) {
+	videos, err := v.VideoRepositoryContract.FindAll(query)
 	if err != nil {
 		return nil, err
 	}
