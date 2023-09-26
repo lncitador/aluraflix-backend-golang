@@ -28,9 +28,9 @@ func TestVideoQuery_SetSearch(t *testing.T) {
 }
 
 func TestVideoQuery_Page(t *testing.T) {
-	t.Run("should return 1 if page is nil", func(t *testing.T) {
+	t.Run("should return nil if page not set", func(t *testing.T) {
 		q := &VideoQuery{}
-		assert.Equal(t, 1, *q.Page())
+		assert.Nil(t, q.Page())
 	})
 
 	t.Run("should return page value from query", func(t *testing.T) {
