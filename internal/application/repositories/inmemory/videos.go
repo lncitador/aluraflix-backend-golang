@@ -17,7 +17,7 @@ func NewVideoRepository(relation *CategoriaRepository) *VideoRepository {
 	return &VideoRepository{db, relation}
 }
 
-func (r *VideoRepository) FindAll(query domain.VideoQuery) ([]domain.Video, error) {
+func (r *VideoRepository) FindAll(query *domain.VideoQuery) ([]domain.Video, error) {
 	return r.db, nil
 }
 
