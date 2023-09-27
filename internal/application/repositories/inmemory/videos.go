@@ -18,6 +18,36 @@ func NewVideoRepository(relation *CategoriaRepository) *VideoRepository {
 }
 
 func (r *VideoRepository) FindAll(query *domain.VideoQuery) ([]domain.Video, error) {
+	var videos []domain.Video
+	if search := query.Search(); search != nil {
+		for _, video := range r.db {
+			if video.Title == *search || video.Description == *search {
+				videos = append(videos, video)
+			}
+		}
+	} else {
+		videos = r.db
+	}
+
+	if page := query.Page(); page != nil {
+		var videosPage []domain.Video
+		limit := *query.Limit()
+		total := len(videos)
+		query.SetTotal(int64(total))
+
+		for i := (*page - 1) * limit; i < *page*limit; i++ {
+			if i < total {
+				videosPage = append(videosPage, videos[i])
+
+				if len(videosPage) >= len(videos) {
+					break
+				}
+			}
+		}
+
+		return videosPage, nil
+	}
+
 	return r.db, nil
 }
 
