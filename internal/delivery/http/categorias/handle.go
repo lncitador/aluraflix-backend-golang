@@ -2,8 +2,6 @@ package categorias
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/lncitador/alura-flix-backend/config"
-	"github.com/lncitador/alura-flix-backend/internal/application/repositories/impl"
 	"github.com/lncitador/alura-flix-backend/internal/application/usecases"
 )
 
@@ -12,27 +10,22 @@ type CategoriaHandlers struct {
 	useCase *usecases.CategoriasUseCase
 }
 
-func NewCategoriaHandlers(config *config.Config) *CategoriaHandlers {
-	db := config.GetDb()
-
-	repo := impl.NewCategoriaRepository(db)
+func NewCategoriaHandlers(router *gin.RouterGroup, repo usecases.CategoriaRepositoryContract) *CategoriaHandlers {
 	useCase := usecases.NewCategoriasUseCase(repo)
 
-	v1 := config.GetRouter().Group("/api/v1")
-
 	return &CategoriaHandlers{
-		router:  v1,
+		router:  router,
 		useCase: useCase,
 	}
 }
 
 func (h CategoriaHandlers) Register() {
-	categorias := h.router.Group("/categorias")
+	categoriasV1 := h.router.Group("/v1/categorias")
 	{
-		categorias.GET("/", h.index)
-		categorias.GET("/:id", h.show)
-		categorias.POST("/", h.create)
-		categorias.PUT("/:id", h.update)
-		categorias.DELETE("/:id", h.delete)
+		categoriasV1.GET("/", h.index)
+		categoriasV1.GET("/:id", h.show)
+		categoriasV1.POST("/", h.create)
+		categoriasV1.PUT("/:id", h.update)
+		categoriasV1.DELETE("/:id", h.delete)
 	}
 }
