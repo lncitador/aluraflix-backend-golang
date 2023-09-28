@@ -2,12 +2,15 @@ package domain
 
 import (
 	"github.com/go-playground/validator/v10"
+	vo "github.com/lncitador/alura-flix-backend/internal/domain/value-objects"
 )
 
 type Categoria struct {
 	Base
-	Name  string `gorm:"type:varchar(255);not null"`
-	Color string `gorm:"type:varchar(7);not null"`
+	Name      string            `gorm:"type:varchar(255);not null"`
+	Color     string            `gorm:"type:varchar(7);not null"`
+	UsuarioID vo.UniqueEntityID `gorm:"type:uuid, not null;index"`
+	Usuario   *Usuario          `gorm:"foreignKey:UsuarioID"`
 }
 
 // NewCategoria creates a new Categoria instance
