@@ -5,7 +5,24 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-// ErrosAsValidationByField returns a boolean indicating if the error is a validation error and the error message
+// ErrosAsValidationByField checks if an error is a validation error related to a specific field.
+//
+// This function accepts two parameters:
+// - err: The error to be checked.
+// - by: A string specifying the field to look for validation errors.
+//
+// Returns:
+//   - A pointer to a boolean that is true if the error is a field validation error
+//     related to the field specified by 'by'. Returns false if the error is not a validation error.
+//   - A string containing the error message associated with the field validation error, if applicable.
+//
+// The function checks if the error is a validation error using the Go "validator" package.
+// If the error is a list of validation errors (ValidationErrors), the function checks if any of them
+// are associated with the field specified by 'by' and returns the first error found, along with the
+// error message. If the error is a single field validation error (FieldError), the function checks
+// if it is associated with the field specified by 'by' and returns the error along with the error message.
+//
+// If the error is not a validation error, the function returns false for the boolean pointer and an empty string.
 func ErrosAsValidationByField(err error, by string) (*bool, string) {
 	errValidation := true
 	if err != nil {
