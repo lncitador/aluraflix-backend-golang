@@ -6,7 +6,15 @@ import (
 )
 
 func (h VideoHandlers) index(c *gin.Context) {
+	user, _ := c.Get("user")
+	userId := user.(*domain.UsuarioDto).ID
+
 	var query domain.VideoQuery
+	if err := query.SetUsuarioID(userId); err != nil {
+		c.JSON(400, gin.H{"error": err.Error()})
+		return
+	}
+
 	search := c.Query("search")
 	query.SetSearch(search)
 
