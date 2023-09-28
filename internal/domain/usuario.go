@@ -17,9 +17,18 @@ func NewUsuario(input UsuarioInput) (*Usuario, error) {
 		return nil, err
 	}
 
+	if input.Password != nil {
+		hash, err := bcrypt.GenerateFromPassword([]byte(*input.Password), bcrypt.DefaultCost)
+
+		if err != nil {
+			return nil, err
+		}
+
+		usuario.Password = string(hash)
+	}
+
 	usuario.Name = *input.Name
 	usuario.Email = *input.Email
-	usuario.Password = *input.Password
 
 	return &usuario, nil
 }
