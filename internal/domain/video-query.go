@@ -2,15 +2,36 @@ package domain
 
 import (
 	"fmt"
+	vo "github.com/lncitador/alura-flix-backend/internal/domain/value-objects"
 	"strconv"
 	"strings"
 )
 
 type VideoQuery struct {
-	search *string
-	page   *int
-	limit  *int
-	total  *int64
+	usuarioId *vo.UniqueEntityID
+	search    *string
+	page      *int
+	limit     *int
+	total     *int64
+}
+
+func (q *VideoQuery) UsuarioID() *vo.UniqueEntityID {
+	return q.usuarioId
+}
+
+func (q *VideoQuery) SetUsuarioID(value string) error {
+	if value != "" {
+		id, err := vo.NewUniqueEntityID(&value)
+		if err != nil {
+			return fmt.Errorf("invalid user id")
+		}
+
+		q.usuarioId = id
+
+		return nil
+	}
+
+	return fmt.Errorf("user id is required")
 }
 
 func (q *VideoQuery) SetSearch(value string) {
