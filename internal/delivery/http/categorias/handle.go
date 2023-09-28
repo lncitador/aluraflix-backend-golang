@@ -2,6 +2,7 @@ package categorias
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/lncitador/alura-flix-backend/internal/application/repositories"
 	"github.com/lncitador/alura-flix-backend/internal/application/usecases"
 )
 
@@ -10,7 +11,7 @@ type CategoriaHandlers struct {
 	useCase *usecases.CategoriasUseCase
 }
 
-func NewCategoriaHandlers(router *gin.RouterGroup, repo usecases.CategoriaRepositoryContract) *CategoriaHandlers {
+func NewCategoriaHandlers(router *gin.RouterGroup, repo repositories.CategoriaRepositoryContract) *CategoriaHandlers {
 	useCase := usecases.NewCategoriasUseCase(repo)
 
 	return &CategoriaHandlers{

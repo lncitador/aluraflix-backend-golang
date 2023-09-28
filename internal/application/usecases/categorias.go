@@ -6,18 +6,16 @@ import (
 	vo "github.com/lncitador/alura-flix-backend/internal/domain/value-objects"
 )
 
-type CategoriaRepositoryContract repositories.RepositoryContract[domain.Categoria, domain.CategoriaQuery]
-
 type CategoriasUseCase struct {
-	CategoriaRepositoryContract
+	repositories.CategoriaRepositoryContract
 }
 
-func NewCategoriasUseCase(contract CategoriaRepositoryContract) *CategoriasUseCase {
+func NewCategoriasUseCase(contract repositories.CategoriaRepositoryContract) *CategoriasUseCase {
 	return &CategoriasUseCase{contract}
 }
 
 func (c *CategoriasUseCase) FindAll() (*[]domain.CategoriaDto, error) {
-	categorias, err := c.CategoriaRepositoryContract.FindAll(domain.CategoriaQuery{})
+	categorias, err := c.CategoriaRepositoryContract.FindAll(nil)
 	if err != nil {
 		return nil, err
 	}

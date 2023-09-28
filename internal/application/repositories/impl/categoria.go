@@ -16,7 +16,7 @@ func NewCategoriaRepository(db *gorm.DB) *CategoriaRepository {
 	return &CategoriaRepository{db}
 }
 
-func (r CategoriaRepository) FindAll(query domain.CategoriaQuery) ([]domain.Categoria, error) {
+func (r CategoriaRepository) FindAll(query *struct{}) ([]domain.Categoria, error) {
 	var categorias []domain.Categoria
 	if err := r.db.Find(&categorias).Error; err != nil {
 		return nil, err
