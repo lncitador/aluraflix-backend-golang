@@ -23,12 +23,29 @@ func setupCategoriaSut() *CategoriaSut {
 	nome := "Name da categoria"
 	hexColor := "#FFFFFF"
 
+	var usuarioId string
+
+	{
+		name := "John Doe"
+		email := "doejoe@test.com"
+		password := "123456"
+
+		usuario, _ := domain.NewUsuario(domain.UsuarioInput{
+			Name:     &name,
+			Email:    &email,
+			Password: &password,
+		})
+
+		usuarioId = usuario.ID.ToString()
+	}
+
 	return &CategoriaSut{
 		repo:    repo,
 		useCase: useCase,
 		constants: domain.CategoriaInput{
-			Name:  &nome,
-			Color: &hexColor,
+			Name:      &nome,
+			Color:     &hexColor,
+			UsuarioID: &usuarioId,
 		},
 	}
 }

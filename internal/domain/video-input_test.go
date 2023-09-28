@@ -34,12 +34,14 @@ func TestVideoInput_validate(t *testing.T) {
 		description := "  My Description  "
 		url := "  https://my-url.com  "
 		categoryID := "  79c741ed-54fb-4501-8b65-8e9bec766709  "
+		usuarioID := "  79c741ed-54fb-4501-8b65-8e9bec766709     "
 
 		i := &VideoInput{
 			Title:       &title,
 			Description: &description,
 			URL:         &url,
 			CategoryID:  &categoryID,
+			UsuarioID:   &usuarioID,
 		}
 
 		err := i.validate()

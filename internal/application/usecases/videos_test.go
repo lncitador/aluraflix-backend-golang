@@ -30,9 +30,26 @@ func setupVideoSut() *VideoSut {
 	name := "Name da categoria"
 	hexColor := "#FFFFFF"
 
+	var usuarioId string
+
+	{
+		name := "John Doe"
+		email := "doejoe@test.com"
+		password := "123456"
+
+		usuario, _ := domain.NewUsuario(domain.UsuarioInput{
+			Name:     &name,
+			Email:    &email,
+			Password: &password,
+		})
+
+		usuarioId = usuario.ID.ToString()
+	}
+
 	categoria, _ := domain.NewCategoria(domain.CategoriaInput{
-		Name:  &name,
-		Color: &hexColor,
+		Name:      &name,
+		Color:     &hexColor,
+		UsuarioID: &usuarioId,
 	})
 
 	categoriaId := categoria.ID.ToString()
@@ -49,6 +66,7 @@ func setupVideoSut() *VideoSut {
 			Description: &descricao,
 			URL:         &url,
 			CategoryID:  &categoriaId,
+			UsuarioID:   &usuarioId,
 		},
 	}
 }

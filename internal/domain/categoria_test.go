@@ -1,18 +1,22 @@
 package domain
 
 import (
+	vo "github.com/lncitador/alura-flix-backend/internal/domain/value-objects"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
 func TestNewCategoria(t *testing.T) {
 	t.Run("should create a new categoria", func(t *testing.T) {
+		id, _ := vo.NewUniqueEntityID(nil)
 		name := "my category"
 		color := "#000000"
+		idStr := id.ToString()
 
 		input := CategoriaInput{
-			Name:  &name,
-			Color: &color,
+			Name:      &name,
+			Color:     &color,
+			UsuarioID: &idStr,
 		}
 
 		categoria, err := NewCategoria(input)

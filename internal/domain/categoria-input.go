@@ -3,8 +3,9 @@ package domain
 import "strings"
 
 type CategoriaInput struct {
-	Name  *string `json:"name" validate:"required,min=8,max=255"`
-	Color *string `json:"color" validate:"required,min=7,max=7,hexcolor"`
+	Name      *string `json:"name" validate:"required,min=8,max=255"`
+	Color     *string `json:"color" validate:"required,min=7,max=7,hexcolor"`
+	UsuarioID *string `json:"usuarioID" validate:"required,uuid4"`
 }
 
 func (i *CategoriaInput) prepare() {

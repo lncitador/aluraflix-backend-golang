@@ -37,6 +37,10 @@ func NewVideo(input VideoInput) (*Video, error) {
 	if err != nil {
 		return nil, err
 	}
+	video.UsuarioID, err = vo.NewUniqueEntityID(input.UsuarioID)
+	if err != nil {
+		return nil, err
+	}
 
 	return &video, nil
 }
@@ -49,6 +53,7 @@ func (v *Video) MapTo() *VideoDto {
 		Description: v.Description,
 		URL:         v.URL.ToString(),
 		CategoryID:  v.CategoryID.ToString(),
+		UsuarioID:   v.UsuarioID.ToString(),
 		CreatedAt:   v.CreatedAt,
 		UpdatedAt:   v.UpdatedAt,
 	}

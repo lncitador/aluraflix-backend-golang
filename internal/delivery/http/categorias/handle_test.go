@@ -38,19 +38,39 @@ func setupSut() *Sut {
 	truthColor := "#000000"
 	invalidName := "Catego"
 	invalidColor := "#0000000"
+	invalidUsuarioId := "invalid"
+
+	var usuarioId string
+
+	{
+		name := "John Doe"
+		email := "doejoe@test.com"
+		password := "123456"
+
+		usuario, _ := domain.NewUsuario(domain.UsuarioInput{
+			Name:     &name,
+			Email:    &email,
+			Password: &password,
+		})
+
+		usuarioId = usuario.ID.ToString()
+	}
 
 	constants := Constants{
 		Truth: domain.CategoriaInput{
-			Name:  &truthName,
-			Color: &truthColor,
+			Name:      &truthName,
+			Color:     &truthColor,
+			UsuarioID: &usuarioId,
 		},
 		Falsy: domain.CategoriaInput{
-			Name:  nil,
-			Color: nil,
+			Name:      nil,
+			Color:     nil,
+			UsuarioID: nil,
 		},
 		Invalid: domain.CategoriaInput{
-			Name:  &invalidName,
-			Color: &invalidColor,
+			Name:      &invalidName,
+			Color:     &invalidColor,
+			UsuarioID: &invalidUsuarioId,
 		},
 	}
 

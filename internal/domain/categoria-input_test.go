@@ -1,6 +1,7 @@
 package domain
 
 import (
+	vo "github.com/lncitador/alura-flix-backend/internal/domain/value-objects"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -37,12 +38,16 @@ func TestCategoriaInput_prepare(t *testing.T) {
 
 func TestCategoriaInput_validate(t *testing.T) {
 	t.Run("should validate categoria input", func(t *testing.T) {
+		id, _ := vo.NewUniqueEntityID(nil)
 		name := "My Category"
 		color := "#000000"
 
+		idStr := id.ToString()
+
 		input := CategoriaInput{
-			Name:  &name,
-			Color: &color,
+			Name:      &name,
+			Color:     &color,
+			UsuarioID: &idStr,
 		}
 
 		err := input.validate()

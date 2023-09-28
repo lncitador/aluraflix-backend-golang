@@ -11,64 +11,124 @@ func TestNewVideo(t *testing.T) {
 	title := "New video"
 	description := "New video description"
 	url := "https://www.youtube.com/watch?v=123456789"
-	categoryID := id.ToString()
+	idStrg := id.ToString()
 
 	t.Run("should create a new video", func(t *testing.T) {
-		video, err := NewVideo(VideoInput{&title, &description, &url, &categoryID})
+		video, err := NewVideo(VideoInput{
+			Title:       &title,
+			Description: &description,
+			URL:         &url,
+			CategoryID:  &idStrg,
+			UsuarioID:   &idStrg,
+		})
 		assert.Nil(t, err)
 		assert.NotNil(t, video)
 	})
 
 	t.Run("should lowercase the title", func(t *testing.T) {
 		title := "New video"
-		video, _ := NewVideo(VideoInput{&title, &description, &url, &categoryID})
+		video, _ := NewVideo(VideoInput{
+			Title:       &title,
+			Description: &description,
+			URL:         &url,
+			CategoryID:  &idStrg,
+			UsuarioID:   &idStrg,
+		})
 		assert.Equal(t, "new video", video.Title)
 	})
 
 	t.Run("should not create a new video with invalid title", func(t *testing.T) {
-		video, err := NewVideo(VideoInput{nil, &description, &url, &categoryID})
+		video, err := NewVideo(VideoInput{
+			Title:       nil,
+			Description: &description,
+			URL:         &url,
+			CategoryID:  &idStrg,
+			UsuarioID:   &idStrg,
+		})
 		assert.NotNil(t, err)
 		assert.Nil(t, video)
 
 		invalidTitle := "Bao"
 
-		video, err = NewVideo(VideoInput{&invalidTitle, &description, &url, &categoryID})
+		video, err = NewVideo(VideoInput{
+			Title:       &invalidTitle,
+			Description: &description,
+			URL:         &url,
+			CategoryID:  &idStrg,
+			UsuarioID:   &idStrg,
+		})
 		assert.NotNil(t, err)
 		assert.Nil(t, video)
 	})
 
 	t.Run("should not create a new video with invalid description", func(t *testing.T) {
-		video, err := NewVideo(VideoInput{&title, nil, &url, &categoryID})
+		video, err := NewVideo(VideoInput{
+			Title:       &title,
+			Description: nil,
+			URL:         &url,
+			CategoryID:  &idStrg,
+			UsuarioID:   &idStrg,
+		})
 		assert.NotNil(t, err)
 		assert.Nil(t, video)
 
 		invalidDescription := "Bao"
 
-		video, err = NewVideo(VideoInput{&title, &invalidDescription, &url, &categoryID})
+		video, err = NewVideo(VideoInput{
+			Title:       &title,
+			Description: &invalidDescription,
+			URL:         &url,
+			CategoryID:  &idStrg,
+			UsuarioID:   &idStrg,
+		})
 		assert.NotNil(t, err)
 		assert.Nil(t, video)
 	})
 
 	t.Run("should not create a new video with invalid url", func(t *testing.T) {
-		video, err := NewVideo(VideoInput{&title, &description, nil, &categoryID})
+		video, err := NewVideo(VideoInput{
+			Title:       &title,
+			Description: &description,
+			URL:         nil,
+			CategoryID:  &idStrg,
+			UsuarioID:   &idStrg,
+		})
 		assert.NotNil(t, err)
 		assert.Nil(t, video)
 
 		invalidUrl := "www.youtube"
 
-		video, err = NewVideo(VideoInput{&title, &description, &invalidUrl, &categoryID})
+		video, err = NewVideo(VideoInput{
+			Title:       &title,
+			Description: &description,
+			URL:         &invalidUrl,
+			CategoryID:  &idStrg,
+			UsuarioID:   &idStrg,
+		})
 		assert.NotNil(t, err)
 		assert.Nil(t, video)
 	})
 
 	t.Run("should not create a new video with invalid category id", func(t *testing.T) {
-		video, err := NewVideo(VideoInput{&title, &description, &url, nil})
+		video, err := NewVideo(VideoInput{
+			Title:       &title,
+			Description: &description,
+			URL:         &url,
+			CategoryID:  nil,
+			UsuarioID:   &idStrg,
+		})
 		assert.NotNil(t, err)
 		assert.Nil(t, video)
 
 		invalidCategoryID := "123"
 
-		video, err = NewVideo(VideoInput{&title, &description, &url, &invalidCategoryID})
+		video, err = NewVideo(VideoInput{
+			Title:       &title,
+			Description: &description,
+			URL:         &url,
+			CategoryID:  &invalidCategoryID,
+			UsuarioID:   &idStrg,
+		})
 		assert.NotNil(t, err)
 		assert.Nil(t, video)
 	})

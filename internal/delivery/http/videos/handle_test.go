@@ -30,9 +30,26 @@ func setupSut() *Sut {
 	name := "Categoria Teste"
 	color := "#000000"
 
+	var usuarioId string
+
+	{
+		name := "John Doe"
+		email := "doejoe@test.com"
+		password := "123456"
+
+		usuario, _ := domain.NewUsuario(domain.UsuarioInput{
+			Name:     &name,
+			Email:    &email,
+			Password: &password,
+		})
+
+		usuarioId = usuario.ID.ToString()
+	}
+
 	categoria, _ := domain.NewCategoria(domain.CategoriaInput{
-		Name:  &name,
-		Color: &color,
+		Name:      &name,
+		Color:     &color,
+		UsuarioID: &usuarioId,
 	})
 
 	if err := relation.Create(*categoria); err != nil {
@@ -58,6 +75,7 @@ func setupSut() *Sut {
 	invalidDescription := "Video"
 	invalidURL := "https://www.youtube.com/watch?v=1"
 	invalidCategoryID := "1"
+	invalidUsuarioID := "1"
 
 	constants := Constants{
 		Truth: domain.VideoInput{
@@ -65,18 +83,21 @@ func setupSut() *Sut {
 			Description: &truthDescription,
 			URL:         &truthURL,
 			CategoryID:  &truthCategoryID,
+			UsuarioID:   &usuarioId,
 		},
 		Falsy: domain.VideoInput{
 			Title:       nil,
 			Description: nil,
 			URL:         nil,
 			CategoryID:  nil,
+			UsuarioID:   nil,
 		},
 		Invalid: domain.VideoInput{
 			Title:       &invalidTitle,
 			Description: &invalidDescription,
 			URL:         &invalidURL,
 			CategoryID:  &invalidCategoryID,
+			UsuarioID:   &invalidUsuarioID,
 		},
 	}
 
