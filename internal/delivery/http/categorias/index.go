@@ -1,13 +1,25 @@
 package categorias
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+	"github.com/lncitador/alura-flix-backend/internal/domain"
+	"net/http"
+)
 
 func (h CategoriaHandlers) index(c *gin.Context) {
-	categorias, err := h.useCase.FindAll()
-	if err != nil {
-		c.JSON(500, gin.H{"error": err.Error()})
+	user, _ := c.Get("user")
+	var query domain.CategoriaQuery
+
+	if err := query.SetUsuarioID(user.(*domain.UsuarioDto).ID); err != nil {
+		c.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(200, categorias)
+	categorias, err := h.useCase.FindAll(&query)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, categorias)
 }
