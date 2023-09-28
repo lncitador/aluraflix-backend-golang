@@ -7,10 +7,10 @@ import (
 
 type Categoria struct {
 	Base
-	Name      string            `gorm:"type:varchar(255);not null"`
-	Color     string            `gorm:"type:varchar(7);not null"`
-	UsuarioID vo.UniqueEntityID `gorm:"type:uuid, not null;index"`
-	Usuario   *Usuario          `gorm:"foreignKey:UsuarioID"`
+	Name      string             `gorm:"type:varchar(255);not null"`
+	Color     string             `gorm:"type:varchar(7);not null"`
+	UsuarioID *vo.UniqueEntityID `gorm:"type:uuid, not null;index"`
+	Usuario   *Usuario           `gorm:"foreignKey:UsuarioID"`
 }
 
 // NewCategoria creates a new Categoria instance
@@ -22,8 +22,14 @@ func NewCategoria(input CategoriaInput) (*Categoria, error) {
 		return nil, err
 	}
 
+	usuarioId, err := vo.NewUniqueEntityID(input.UsuarioID)
+	if err != nil {
+		return nil, err
+	}
+
 	categoria.Name = *input.Name
 	categoria.Color = *input.Color
+	categoria.UsuarioID = usuarioId
 
 	return &categoria, nil
 }
@@ -34,6 +40,7 @@ func (c *Categoria) MapTo() *CategoriaDto {
 		ID:        c.ID.ToString(),
 		Name:      c.Name,
 		Color:     c.Color,
+		UsuarioID: c.UsuarioID.ToString(),
 		CreatedAt: c.CreatedAt,
 		UpdatedAt: c.UpdatedAt,
 	}
