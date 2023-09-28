@@ -30,13 +30,19 @@ func NewCategoria(input CategoriaInput) (*Categoria, error) {
 
 // MapTo maps Categoria to CategoriaDto struct
 func (c *Categoria) MapTo() *CategoriaDto {
-	return &CategoriaDto{
+	categoria := &CategoriaDto{
 		ID:        c.ID.ToString(),
 		Name:      c.Name,
 		Color:     c.Color,
 		CreatedAt: c.CreatedAt,
 		UpdatedAt: c.UpdatedAt,
 	}
+
+	if c.Usuario != nil {
+		categoria.Usuario = c.Usuario
+	}
+
+	return categoria
 }
 
 // Fill updates the Categoria instance
