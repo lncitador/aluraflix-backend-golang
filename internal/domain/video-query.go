@@ -3,6 +3,8 @@ package domain
 import (
 	"fmt"
 	vo "github.com/lncitador/alura-flix-backend/internal/domain/value-objects"
+	"github.com/lncitador/alura-flix-backend/pkg/errors"
+	"net/http"
 	"strconv"
 	"strings"
 )
@@ -19,11 +21,11 @@ func (q *VideoQuery) UsuarioID() *vo.UniqueEntityID {
 	return q.usuarioId
 }
 
-func (q *VideoQuery) SetUsuarioID(value string) error {
+func (q *VideoQuery) SetUsuarioID(value string) *errors.Error {
 	if value != "" {
 		id, err := vo.NewUniqueEntityID(&value)
 		if err != nil {
-			return fmt.Errorf("invalid user id")
+			return errors.NewErrorByUnauthorized(err)
 		}
 
 		q.usuarioId = id
@@ -31,7 +33,7 @@ func (q *VideoQuery) SetUsuarioID(value string) error {
 		return nil
 	}
 
-	return fmt.Errorf("user id is required")
+	return errors.NewError(http.StatusUnprocessableEntity, "Unauthorized", "usuario_id is required")
 }
 
 func (q *VideoQuery) SetSearch(value string) {
@@ -46,12 +48,12 @@ func (q *VideoQuery) Search() *string {
 	return q.search
 }
 
-func (q *VideoQuery) SetPage(value string) error {
+func (q *VideoQuery) SetPage(value string) *errors.Error {
 	if value != "" {
 		if page, err := strconv.Atoi(value); err != nil {
-			return fmt.Errorf("page must be a number")
+			return errors.NewError(http.StatusUnprocessableEntity, "Validation error", "page must be a number")
 		} else if page < 1 {
-			return fmt.Errorf("page must be greater than 0")
+			return errors.NewError(http.StatusUnprocessableEntity, "Validation error", "page must be greater than 0")
 		} else {
 			q.page = &page
 
@@ -66,14 +68,14 @@ func (q *VideoQuery) Page() *int {
 	return q.page
 }
 
-func (q *VideoQuery) SetLimit(value string) error {
+func (q *VideoQuery) SetLimit(value string) *errors.Error {
 	if value != "" {
 		if limit, err := strconv.Atoi(value); err != nil {
-			return fmt.Errorf("limit must be a number")
+			return errors.NewError(http.StatusUnprocessableEntity, "Validation error", "limit must be a number")
 		} else if limit < 10 {
-			return fmt.Errorf("limit must be greater than 10")
+			return errors.NewError(http.StatusUnprocessableEntity, "Validation error", "limit must be greater than 10")
 		} else if limit > 100 {
-			return fmt.Errorf("limit must be less than 100")
+			return errors.NewError(http.StatusUnprocessableEntity, "Validation error", "limit must be less than 100")
 		} else {
 			q.limit = &limit
 

@@ -3,6 +3,7 @@ package domain
 import (
 	"github.com/go-playground/validator/v10"
 	vo "github.com/lncitador/alura-flix-backend/internal/domain/value-objects"
+	"github.com/lncitador/alura-flix-backend/pkg/errors"
 )
 
 type Video struct {
@@ -17,17 +18,17 @@ type Video struct {
 }
 
 // NewVideo creates a new Video instance
-func NewVideo(input VideoInput) (*Video, error) {
+func NewVideo(input VideoInput) (*Video, *errors.Error) {
 	video := Video{}
 	video.prepare()
 
 	if err := input.validate(); err != nil {
-		return nil, err
+		return nil, errors.NewErrorByValidation(err)
 	}
 
 	newUrl, err := vo.NewURL(*input.URL)
 	if err != nil {
-		return nil, err
+		return nil, errors.NewErrorByValidation(err)
 	}
 
 	video.Title = *input.Title
@@ -35,11 +36,11 @@ func NewVideo(input VideoInput) (*Video, error) {
 	video.URL = newUrl
 	video.CategoryID, err = vo.NewUniqueEntityID(input.CategoryID)
 	if err != nil {
-		return nil, err
+		return nil, errors.NewErrorByValidation(err)
 	}
 	video.UsuarioID, err = vo.NewUniqueEntityID(input.UsuarioID)
 	if err != nil {
-		return nil, err
+		return nil, errors.NewErrorByValidation(err)
 	}
 
 	return &video, nil
@@ -70,7 +71,7 @@ func (v *Video) MapTo() *VideoDto {
 }
 
 // Fill fills Video with VideoInput data
-func (v *Video) Fill(input VideoInput) error {
+func (v *Video) Fill(input VideoInput) *errors.Error {
 	err := validate.Struct(input)
 
 	if err != nil {
@@ -78,7 +79,7 @@ func (v *Video) Fill(input VideoInput) error {
 			if err.Tag() == "required" {
 				continue
 			}
-			return err
+			return errors.NewErrorByValidation(err)
 		}
 	}
 
@@ -93,7 +94,7 @@ func (v *Video) Fill(input VideoInput) error {
 	if input.URL != nil {
 		newUrl, err := vo.NewURL(*input.URL)
 		if err != nil {
-			return err
+			return errors.NewErrorByValidation(err)
 		}
 		v.URL = newUrl
 	}
@@ -101,7 +102,7 @@ func (v *Video) Fill(input VideoInput) error {
 	if input.CategoryID != nil {
 		categoriaId, err := vo.NewUniqueEntityID(input.CategoryID)
 		if err != nil {
-			return err
+			return errors.NewErrorByValidation(err)
 		}
 		v.CategoryID = categoriaId
 	}

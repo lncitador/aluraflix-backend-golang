@@ -2,6 +2,7 @@ package domain
 
 import (
 	vo "github.com/lncitador/alura-flix-backend/internal/domain/value-objects"
+	"github.com/lncitador/alura-flix-backend/pkg/errors"
 	"time"
 )
 
@@ -19,15 +20,15 @@ type VideoDto struct {
 }
 
 // MapFrom maps VideoDto to Video struct
-func (d VideoDto) MapFrom() (*Video, error) {
+func (d VideoDto) MapFrom() (*Video, *errors.Error) {
 	id, err := vo.NewUniqueEntityID(&d.ID)
 	if err != nil {
-		return nil, err
+		return nil, errors.NewErrorByValidation(err)
 	}
 
 	newUrl, err := vo.NewURL(d.URL)
 	if err != nil {
-		return nil, err
+		return nil, errors.NewErrorByValidation(err)
 	}
 
 	base := Base{
@@ -38,7 +39,7 @@ func (d VideoDto) MapFrom() (*Video, error) {
 
 	categoriaId, err := vo.NewUniqueEntityID(&d.CategoryID)
 	if err != nil {
-		return nil, err
+		return nil, errors.NewErrorByValidation(err)
 	}
 
 	return &Video{
