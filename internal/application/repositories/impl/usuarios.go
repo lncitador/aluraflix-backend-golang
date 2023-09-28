@@ -5,7 +5,9 @@ import (
 	e "github.com/lncitador/alura-flix-backend/internal/application/repositories/errors"
 	"github.com/lncitador/alura-flix-backend/internal/domain"
 	vo "github.com/lncitador/alura-flix-backend/internal/domain/value-objects"
+	. "github.com/lncitador/alura-flix-backend/pkg/errors"
 	"gorm.io/gorm"
+	"net/http"
 )
 
 type UsuarioRepository struct {
@@ -18,74 +20,74 @@ func NewUsuarioRepository(db *gorm.DB) *UsuarioRepository {
 	}
 }
 
-func (u UsuarioRepository) FindAll(query *struct{}) ([]domain.Usuario, error) {
+func (u UsuarioRepository) FindAll(query *struct{}) ([]domain.Usuario, *Error) {
 	var usuarios []domain.Usuario
 
 	if err := u.db.Find(&usuarios).Error; err != nil {
-		return nil, err
+		return nil, NewErrorByBadRequest(err)
 	}
 
 	return usuarios, nil
 }
 
-func (u UsuarioRepository) FindById(id *vo.UniqueEntityID) (*domain.Usuario, error) {
+func (u UsuarioRepository) FindById(id *vo.UniqueEntityID) (*domain.Usuario, *Error) {
 	if id == nil {
-		return nil, errors.New(e.ErrUsuarioIdIsNull)
+		return nil, NewError(http.StatusBadRequest, e.ErrUsuarioIdIsNull, "")
 	}
 
 	var usuario domain.Usuario
 	if err := u.db.First(&usuario, id).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, errors.New(e.ErrFindByIdUsuario)
+			return nil, NewErrorByNotFound(err)
 		}
 
-		return nil, err
+		return nil, NewErrorByBadRequest(err)
 	}
 
 	return &usuario, nil
 }
 
-func (u UsuarioRepository) Create(data domain.Usuario) error {
+func (u UsuarioRepository) Create(data domain.Usuario) *Error {
 	if err := u.db.Create(&data).Error; err != nil {
-		return err
+		return NewErrorByBadRequest(err)
 	}
 
 	return nil
 }
 
-func (u UsuarioRepository) Update(data domain.Usuario) error {
+func (u UsuarioRepository) Update(data domain.Usuario) *Error {
 	if err := u.db.Save(&data).Error; err != nil {
-		return err
+		return NewErrorByBadRequest(err)
 	}
 
 	return nil
 }
 
-func (u UsuarioRepository) Delete(id *vo.UniqueEntityID) error {
+func (u UsuarioRepository) Delete(id *vo.UniqueEntityID) *Error {
 	if id == nil {
-		return errors.New(e.ErrUsuarioIdIsNull)
+		return NewError(http.StatusBadRequest, e.ErrUsuarioIdIsNull, "")
 	}
 
 	var usuario domain.Usuario
 	if err := u.db.Delete(&usuario, id).Error; err != nil {
-		return err
+		return NewErrorByBadRequest(err)
 	}
 
 	return nil
 }
 
-func (u UsuarioRepository) FindByEmail(email *string) (*domain.Usuario, error) {
+func (u UsuarioRepository) FindByEmail(email *string) (*domain.Usuario, *Error) {
 	if email == nil {
-		return nil, errors.New(e.ErrUsuarioEmailIsNull)
+		return nil, NewError(http.StatusBadRequest, e.ErrUsuarioEmailIsNull, "")
 	}
 
 	var usuario domain.Usuario
 	if err := u.db.Where("email = ?", email).First(&usuario).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, errors.New(e.ErrFindByIdUsuario)
+			return nil, NewError(http.StatusNotFound, e.ErrUsuarioNotFound, "")
 		}
 
-		return nil, err
+		return nil, NewErrorByBadRequest(err)
 	}
 
 	return &usuario, nil
