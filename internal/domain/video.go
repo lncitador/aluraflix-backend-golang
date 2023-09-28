@@ -12,6 +12,8 @@ type Video struct {
 	URL         *vo.URL            `gorm:"type:varchar(255);not null;index"`
 	CategoryID  *vo.UniqueEntityID `gorm:"type:uuid, not null;index"`
 	Category    *Categoria         `gorm:"foreignKey:CategoryID"`
+	UsuarioID   *vo.UniqueEntityID `gorm:"type:uuid, not null;index"`
+	Usuario     *Usuario           `gorm:"foreignKey:UsuarioID"`
 }
 
 // NewVideo creates a new Video instance
@@ -53,6 +55,10 @@ func (v *Video) MapTo() *VideoDto {
 
 	if v.Category != nil {
 		video.Category = v.Category
+	}
+
+	if v.Usuario != nil {
+		video.Usuario = v.Usuario
 	}
 
 	return video
