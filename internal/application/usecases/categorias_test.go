@@ -20,7 +20,7 @@ func setupCategoriaSut() *CategoriaSut {
 	repo := inmemory.NewCategoriaRepository()
 	useCase := NewCategoriasUseCase(repo)
 
-	nome := "Nome da categoria"
+	nome := "Name da categoria"
 	hexColor := "#FFFFFF"
 
 	return &CategoriaSut{
@@ -147,7 +147,7 @@ func TestCategoriasUseCase_Update(t *testing.T) {
 		assert.Nil(t, err)
 		assert.NotNil(t, categoria)
 
-		name := "Nome da categoria atualizado"
+		name := "Name da categoria atualizado"
 
 		data := domain.CategoriaInput{
 			Name: &name,
