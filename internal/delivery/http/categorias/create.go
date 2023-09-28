@@ -8,7 +8,11 @@ import (
 )
 
 func (h CategoriaHandlers) create(c *gin.Context) {
+	user, _ := c.Get("user")
 	var dto domain.CategoriaInput
+
+	dto.UsuarioID = &user.(*domain.UsuarioDto).ID
+
 	if err := c.ShouldBindJSON(&dto); err != nil {
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
