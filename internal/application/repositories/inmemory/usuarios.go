@@ -1,6 +1,8 @@
 package inmemory
 
 import (
+	"errors"
+	e "github.com/lncitador/alura-flix-backend/internal/application/repositories/errors"
 	"github.com/lncitador/alura-flix-backend/internal/domain"
 	vo "github.com/lncitador/alura-flix-backend/internal/domain/value-objects"
 )
@@ -26,7 +28,7 @@ func (r *UsuariosRepository) FindById(id *vo.UniqueEntityID) (*domain.Usuario, e
 		}
 	}
 
-	return nil, nil
+	return nil, errors.New(e.ErrUsuarioNotFound)
 }
 
 func (r *UsuariosRepository) Create(data domain.Usuario) error {
@@ -42,7 +44,7 @@ func (r *UsuariosRepository) Update(data domain.Usuario) error {
 		}
 	}
 
-	return nil
+	return errors.New(e.ErrUsuarioNotFound)
 }
 
 func (r *UsuariosRepository) Delete(id *vo.UniqueEntityID) error {
@@ -53,5 +55,5 @@ func (r *UsuariosRepository) Delete(id *vo.UniqueEntityID) error {
 		}
 	}
 
-	return nil
+	return errors.New(e.ErrUsuarioNotFound)
 }
