@@ -2,6 +2,7 @@ package videos
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/lncitador/alura-flix-backend/internal/application/repositories"
 	"github.com/lncitador/alura-flix-backend/internal/application/usecases"
 )
 
@@ -10,7 +11,7 @@ type VideoHandlers struct {
 	useCase *usecases.VideosUseCase
 }
 
-func NewVideoHandlers(router *gin.RouterGroup, repo usecases.VideoRepositoryContract) *VideoHandlers {
+func NewVideoHandlers(router *gin.RouterGroup, repo repositories.VideoRepositoryContract) *VideoHandlers {
 	useCase := usecases.NewVideosUseCase(repo)
 
 	return &VideoHandlers{

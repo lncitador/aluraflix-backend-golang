@@ -8,13 +8,11 @@ import (
 	vo "github.com/lncitador/alura-flix-backend/internal/domain/value-objects"
 )
 
-type VideoRepositoryContract repositories.RepositoryContract[domain.Video, *domain.VideoQuery]
-
 type VideosUseCase struct {
-	VideoRepositoryContract
+	repositories.VideoRepositoryContract
 }
 
-func NewVideosUseCase(contract VideoRepositoryContract) *VideosUseCase {
+func NewVideosUseCase(contract repositories.VideoRepositoryContract) *VideosUseCase {
 	return &VideosUseCase{contract}
 }
 
