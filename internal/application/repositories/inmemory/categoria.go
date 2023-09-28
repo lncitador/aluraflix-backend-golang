@@ -15,7 +15,7 @@ func NewCategoriaRepository() *CategoriaRepository {
 	return &CategoriaRepository{}
 }
 
-func (r *CategoriaRepository) FindAll(query *struct{}) ([]domain.Categoria, error) {
+func (r *CategoriaRepository) FindAll(query *domain.CategoriaQuery) ([]domain.Categoria, error) {
 	return r.db, nil
 }
 
