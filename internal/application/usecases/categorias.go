@@ -14,8 +14,8 @@ func NewCategoriasUseCase(contract repositories.CategoriaRepositoryContract) *Ca
 	return &CategoriasUseCase{contract}
 }
 
-func (c *CategoriasUseCase) FindAll() (*[]domain.CategoriaDto, error) {
-	categorias, err := c.CategoriaRepositoryContract.FindAll(nil)
+func (c *CategoriasUseCase) FindAll(query *domain.CategoriaQuery) (*[]domain.CategoriaDto, error) {
+	categorias, err := c.CategoriaRepositoryContract.FindAll(query)
 	if err != nil {
 		return nil, err
 	}
