@@ -1,11 +1,10 @@
 package usecases
 
 import (
-	"fmt"
 	"github.com/lncitador/alura-flix-backend/internal/application/repositories"
-	"github.com/lncitador/alura-flix-backend/internal/application/repositories/errors"
 	"github.com/lncitador/alura-flix-backend/internal/domain"
 	vo "github.com/lncitador/alura-flix-backend/internal/domain/value-objects"
+	. "github.com/lncitador/alura-flix-backend/pkg/errors"
 )
 
 type VideosUseCase struct {
@@ -16,7 +15,7 @@ func NewVideosUseCase(contract repositories.VideoRepositoryContract) *VideosUseC
 	return &VideosUseCase{contract}
 }
 
-func (v VideosUseCase) FindAll(query *domain.VideoQuery) (*[]domain.VideoDto, error) {
+func (v VideosUseCase) FindAll(query *domain.VideoQuery) (*[]domain.VideoDto, *Error) {
 	videos, err := v.VideoRepositoryContract.FindAll(query)
 	if err != nil {
 		return nil, err
@@ -25,7 +24,7 @@ func (v VideosUseCase) FindAll(query *domain.VideoQuery) (*[]domain.VideoDto, er
 	return domain.VideosToDto(videos), nil
 }
 
-func (v VideosUseCase) FindById(id *vo.UniqueEntityID) (*domain.VideoDto, error) {
+func (v VideosUseCase) FindById(id *vo.UniqueEntityID) (*domain.VideoDto, *Error) {
 	video, err := v.VideoRepositoryContract.FindById(id)
 	if err != nil {
 		return nil, err
@@ -34,7 +33,7 @@ func (v VideosUseCase) FindById(id *vo.UniqueEntityID) (*domain.VideoDto, error)
 	return video.MapTo(), nil
 }
 
-func (v VideosUseCase) Create(data domain.VideoInput) (*domain.VideoDto, error) {
+func (v VideosUseCase) Create(data domain.VideoInput) (*domain.VideoDto, *Error) {
 	video, err := domain.NewVideo(data)
 	if err != nil {
 		return nil, err
@@ -47,10 +46,10 @@ func (v VideosUseCase) Create(data domain.VideoInput) (*domain.VideoDto, error) 
 	return video.MapTo(), nil
 }
 
-func (v VideosUseCase) Update(id *vo.UniqueEntityID, data domain.VideoInput) (*domain.VideoDto, error) {
+func (v VideosUseCase) Update(id *vo.UniqueEntityID, data domain.VideoInput) (*domain.VideoDto, *Error) {
 	video, err := v.VideoRepositoryContract.FindById(id)
 	if err != nil {
-		return nil, fmt.Errorf(errors.ErrFindByIdVideo)
+		return nil, err
 	}
 
 	if err := video.Fill(data); err != nil {
@@ -64,7 +63,7 @@ func (v VideosUseCase) Update(id *vo.UniqueEntityID, data domain.VideoInput) (*d
 	return video.MapTo(), nil
 }
 
-func (v VideosUseCase) Delete(id *vo.UniqueEntityID) error {
+func (v VideosUseCase) Delete(id *vo.UniqueEntityID) *Error {
 	if err := v.VideoRepositoryContract.Delete(id); err != nil {
 		return err
 	}
