@@ -14,43 +14,43 @@ import (
 func (h AuthHandlers) AuthMiddleware(c *gin.Context) {
 	tokenStr, err := c.Cookie("Authorization")
 	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization not provided"})
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Authorization not provided"})
 		return
 	}
 
 	token, err := parseJWT(tokenStr)
 	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
 	}
 
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if !ok || !token.Valid {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
 		return
 	}
 
 	expiration, ok := claims["exp"].(float64)
 	if !ok || expiration < float64(time.Now().Unix()) {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Token expired"})
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Token expired"})
 		return
 	}
 
 	sub, ok := claims["sub"].(string)
 	if !ok {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Sub claim missing"})
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Sub claim missing"})
 		return
 	}
 
 	id, err := vo.NewUniqueEntityID(&sub)
 	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
 	}
 
 	usuario, err := h.useCase.FindById(id)
 	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
 	}
 
