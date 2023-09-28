@@ -1,6 +1,12 @@
 package domain
 
-import "github.com/go-playground/validator/v10"
+import (
+	"github.com/go-playground/validator/v10"
+	"github.com/golang-jwt/jwt/v5"
+	"golang.org/x/crypto/bcrypt"
+	"os"
+	"time"
+)
 
 type Usuario struct {
 	Base
@@ -8,6 +14,8 @@ type Usuario struct {
 	Email    string `gorm:"type:varchar(255);not null;unique"`
 	Password string `gorm:"type:varchar(255);not null"`
 }
+
+const TokenMaxAge = time.Hour * 6
 
 func NewUsuario(input UsuarioInput) (*Usuario, error) {
 	usuario := Usuario{}
@@ -68,4 +76,28 @@ func (u *Usuario) Fill(input UsuarioInput) error {
 	}
 
 	return nil
+}
+
+func (u *Usuario) ComparePassword(password *string) error {
+	return bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(*password))
+}
+
+func (u *Usuario) GenerateToken() (*string, error) {
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"sub":  u.ID.ToString(),
+		"name": u.Name,
+		"exp":  TokenMaxAge,
+	})
+
+	secret := os.Getenv("SECRET")
+	if secret == "" {
+		secret = "secret"
+	}
+
+	tokenString, err := token.SignedString([]byte(secret))
+	if err != nil {
+		return nil, err
+	}
+
+	return &tokenString, nil
 }
