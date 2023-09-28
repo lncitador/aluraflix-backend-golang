@@ -7,7 +7,7 @@ import (
 
 type UsuarioDto struct {
 	ID        string    `json:"id"`
-	Nome      string    `json:"nome"`
+	Name      string    `json:"name"`
 	Email     string    `json:"email"`
 	CreatedAt time.Time `json:"createdAt"`
 	UpdatedAt time.Time `json:"updatedAt"`
@@ -27,7 +27,7 @@ func (u UsuarioDto) MapFrom() (*Usuario, error) {
 
 	return &Usuario{
 		Base:  base,
-		Nome:  u.Nome,
+		Name:  u.Name,
 		Email: u.Email,
 	}, nil
 }

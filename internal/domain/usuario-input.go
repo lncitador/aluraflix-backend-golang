@@ -6,14 +6,14 @@ import (
 )
 
 type UsuarioInput struct {
-	Nome     *string `json:"nome" validate:"required"`
+	Name     *string `json:"name" validate:"required"`
 	Email    *string `json:"email" validate:"required,email"`
 	Password *string `json:"password" validate:"required,min=6"`
 }
 
-func (u *UsuarioInput) prepare() error {
-	if u.Nome != nil {
-		*u.Nome = strings.ToLower(strings.TrimSpace(*u.Nome))
+func (u *UsuarioInput) prepare() {
+	if u.Name != nil {
+		*u.Name = strings.ToLower(strings.TrimSpace(*u.Name))
 	}
 
 	if u.Email != nil {

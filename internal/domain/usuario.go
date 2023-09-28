@@ -1,8 +1,10 @@
 package domain
 
+import "github.com/go-playground/validator/v10"
+
 type Usuario struct {
 	Base
-	Nome     string `gorm:"type:varchar(255);not null"`
+	Name     string `gorm:"type:varchar(255);not null"`
 	Email    string `gorm:"type:varchar(255);not null;unique"`
 	Password string `gorm:"type:varchar(255);not null"`
 }
@@ -15,7 +17,7 @@ func NewUsuario(input UsuarioInput) (*Usuario, error) {
 		return nil, err
 	}
 
-	usuario.Nome = *input.Nome
+	usuario.Name = *input.Name
 	usuario.Email = *input.Email
 	usuario.Password = *input.Password
 
@@ -25,7 +27,7 @@ func NewUsuario(input UsuarioInput) (*Usuario, error) {
 func (u *Usuario) MapTo() *UsuarioDto {
 	return &UsuarioDto{
 		ID:        u.ID.ToString(),
-		Nome:      u.Nome,
+		Name:      u.Name,
 		Email:     u.Email,
 		CreatedAt: u.CreatedAt,
 		UpdatedAt: u.UpdatedAt,
@@ -33,12 +35,19 @@ func (u *Usuario) MapTo() *UsuarioDto {
 }
 
 func (u *Usuario) Fill(input UsuarioInput) error {
-	if err := input.validate(); err != nil {
-		return err
+	err := validate.Struct(input)
+
+	if err != nil {
+		for _, err := range err.(validator.ValidationErrors) {
+			if err.Tag() == "required" {
+				continue
+			}
+			return err
+		}
 	}
 
-	if input.Nome != nil {
-		u.Nome = *input.Nome
+	if input.Name != nil {
+		u.Name = *input.Name
 	}
 
 	if input.Email != nil {
