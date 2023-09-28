@@ -12,6 +12,8 @@ type VideoDto struct {
 	URL         string     `json:"url"`
 	CategoryID  string     `json:"categoryId"`
 	Category    *Categoria `json:"category,omitempty"`
+	UsuarioID   string     `json:"usuarioId"`
+	Usuario     *Usuario   `json:"usuario,omitempty"`
 	CreatedAt   time.Time  `json:"createdAt"`
 	UpdatedAt   time.Time  `json:"updatedAt"`
 }
