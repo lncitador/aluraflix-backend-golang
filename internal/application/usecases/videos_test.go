@@ -27,7 +27,7 @@ func setupVideoSut() *VideoSut {
 	descricao := "Descrição do vídeo"
 	url := "https://www.youtube.com/watch?v=123456789"
 
-	name := "Nome da categoria"
+	name := "Name da categoria"
 	hexColor := "#FFFFFF"
 
 	categoria, _ := domain.NewCategoria(domain.CategoriaInput{
