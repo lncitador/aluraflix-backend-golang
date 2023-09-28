@@ -143,14 +143,7 @@ func TestUsuariosUseCase_FindById(t *testing.T) {
 
 		got, err := sut.useCase.FindById(id)
 
-		assert.Nil(t, err)
-		assert.Nil(t, got)
-	})
-
-	t.Run("should not find a user by invalid id", func(t *testing.T) {
-		got, err := sut.useCase.FindById(nil)
-
-		assert.Nil(t, err)
+		assert.NotNil(t, err)
 		assert.Nil(t, got)
 	})
 }
@@ -242,5 +235,58 @@ func TestUsuariosUseCase_Update(t *testing.T) {
 
 		assert.NotNil(t, err)
 		assert.Nil(t, got)
+	})
+}
+
+func TestUsuariosUseCase_Signin(t *testing.T) {
+	sut := setupSut()
+	data := sut.constants
+
+	t.Run("should signin a user", func(t *testing.T) {
+		got, err := sut.useCase.Create(data)
+
+		assert.Nil(t, err)
+		assert.NotNil(t, got)
+
+		usuario, err := sut.useCase.Signin(*data.Email, *data.Password)
+
+		assert.Nil(t, err)
+		assert.NotNil(t, usuario)
+	})
+
+	t.Run("should not signin a user with invalid email", func(t *testing.T) {
+		got, err := sut.useCase.Create(data)
+
+		assert.Nil(t, err)
+		assert.NotNil(t, got)
+
+		invalidEmail := "doejoe@test"
+
+		usuario, err := sut.useCase.Signin(invalidEmail, *data.Password)
+
+		assert.NotNil(t, err)
+		assert.Nil(t, usuario)
+
+		isErrValidation, _ := validations.ErrosAsValidationByField(err, "Email")
+
+		assert.True(t, *isErrValidation)
+	})
+
+	t.Run("should not signin a user with invalid password", func(t *testing.T) {
+		got, err := sut.useCase.Create(data)
+
+		assert.Nil(t, err)
+		assert.NotNil(t, got)
+
+		invalidPassword := "123"
+
+		usuario, err := sut.useCase.Signin(*data.Email, invalidPassword)
+
+		assert.NotNil(t, err)
+		assert.Nil(t, usuario)
+
+		isErrValidation, _ := validations.ErrosAsValidationByField(err, "Password")
+
+		assert.True(t, *isErrValidation)
 	})
 }

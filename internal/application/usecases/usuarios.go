@@ -69,3 +69,26 @@ func (u *UsuariosUseCase) Delete(id *vo.UniqueEntityID) error {
 
 	return nil
 }
+
+func (u *UsuariosUseCase) Signin(email string, password string) (*string, error) {
+	credentials, err := domain.NewCredential(email, password)
+	if err != nil {
+		return nil, err
+	}
+
+	usuario, err := u.UsuarioRepositoryContract.FindByEmail(credentials.Email)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := usuario.ComparePassword(credentials.Password); err != nil {
+		return nil, err
+	}
+
+	token, err := usuario.GenerateToken()
+	if err != nil {
+		return nil, err
+	}
+
+	return token, nil
+}
