@@ -28,6 +28,6 @@ func (h AuthHandlers) signin(c *gin.Context) {
 	}
 
 	c.SetSameSite(http.SameSiteStrictMode)
-	c.SetCookie("Authorization", "Bearer "+*token, int(domain.TokenMaxAge), "", "", false, true)
+	c.SetCookie("Authorization", *token, int(domain.TokenMaxAge), "", "", false, true)
 	c.JSON(http.StatusCreated, gin.H{})
 }
