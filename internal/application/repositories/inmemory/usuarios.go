@@ -57,3 +57,13 @@ func (r *UsuariosRepository) Delete(id *vo.UniqueEntityID) error {
 
 	return errors.New(e.ErrUsuarioNotFound)
 }
+
+func (r *UsuariosRepository) FindByEmail(email *string) (*domain.Usuario, error) {
+	for _, usuario := range r.db {
+		if usuario.Email == *email {
+			return &usuario, nil
+		}
+	}
+
+	return nil, errors.New(e.ErrUsuarioNotFound)
+}
