@@ -2,4 +2,7 @@ package repositories
 
 import "github.com/lncitador/alura-flix-backend/internal/domain"
 
-type UsuarioRepositoryContract RepositoryContract[domain.Usuario, *struct{}]
+type UsuarioRepositoryContract interface {
+	RepositoryContract[domain.Usuario, *struct{}]
+	FindByEmail(email *string) (*domain.Usuario, error)
+}
