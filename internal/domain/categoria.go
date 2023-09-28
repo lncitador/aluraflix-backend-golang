@@ -10,8 +10,6 @@ type Categoria struct {
 	Color string `gorm:"type:varchar(7);not null"`
 }
 
-type CategoriaQuery struct{}
-
 // NewCategoria creates a new Categoria instance
 func NewCategoria(input CategoriaInput) (*Categoria, error) {
 	categoria := Categoria{}
