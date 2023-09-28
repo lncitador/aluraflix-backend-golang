@@ -11,7 +11,7 @@ func (c Config) GetDb() *gorm.DB {
 }
 
 func migrations(c *Config) {
-	if err := c.db.AutoMigrate(&domain.Video{}, &domain.Categoria{}); err != nil {
+	if err := c.db.AutoMigrate(&domain.Video{}, &domain.Categoria{}, &domain.Usuario{}); err != nil {
 		log.Fatal(err)
 	}
 }
