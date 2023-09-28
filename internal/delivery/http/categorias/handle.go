@@ -20,8 +20,13 @@ func NewCategoriaHandlers(router *gin.RouterGroup, repo repositories.CategoriaRe
 	}
 }
 
-func (h CategoriaHandlers) Register() {
+func (h CategoriaHandlers) Register(middlewares ...gin.HandlerFunc) {
 	categoriasV1 := h.router.Group("/v1/categorias")
+
+	for _, middleware := range middlewares {
+		categoriasV1.Use(middleware)
+	}
+
 	{
 		categoriasV1.GET("/", h.index)
 		categoriasV1.GET("/:id", h.show)

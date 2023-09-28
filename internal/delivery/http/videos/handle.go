@@ -20,8 +20,13 @@ func NewVideoHandlers(router *gin.RouterGroup, repo repositories.VideoRepository
 	}
 }
 
-func (h VideoHandlers) Register() {
+func (h VideoHandlers) Register(middlewares ...gin.HandlerFunc) {
 	videosV1 := h.router.Group("/v1/videos")
+
+	for _, middleware := range middlewares {
+		videosV1.Use(middleware)
+	}
+
 	{
 		videosV1.GET("/", h.index)
 		videosV1.GET("/:id", h.show)
