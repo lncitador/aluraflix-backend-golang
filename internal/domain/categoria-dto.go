@@ -39,9 +39,15 @@ func (d CategoriaDto) MapFrom() (*Categoria, error) {
 		UpdatedAt: d.UpdatedAt,
 	}
 
+	usuarioId, err := vo.NewUniqueEntityID(&d.UsuarioID)
+	if err != nil {
+		return nil, err
+	}
+
 	return &Categoria{
-		Base:  base,
-		Name:  d.Name,
-		Color: d.Color,
+		Base:      base,
+		Name:      d.Name,
+		Color:     d.Color,
+		UsuarioID: usuarioId,
 	}, nil
 }
