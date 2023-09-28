@@ -9,6 +9,8 @@ type CategoriaDto struct {
 	ID        string    `json:"id"`
 	Name      string    `json:"name"`
 	Color     string    `json:"color"`
+	UsuarioID string    `json:"usuarioId"`
+	Usuario   *Usuario  `json:"usuario,omitempty"`
 	CreatedAt time.Time `json:"createdAt"`
 	UpdatedAt time.Time `json:"updatedAt"`
 }
@@ -37,5 +39,9 @@ func (d CategoriaDto) MapFrom() (*Categoria, error) {
 		UpdatedAt: d.UpdatedAt,
 	}
 
-	return &Categoria{base, d.Name, d.Color}, nil
+	return &Categoria{
+		Base:  base,
+		Name:  d.Name,
+		Color: d.Color,
+	}, nil
 }
