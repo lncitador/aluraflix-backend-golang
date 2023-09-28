@@ -7,6 +7,7 @@ type VideoInput struct {
 	Description *string `json:"description" validate:"required,min=8,max=255"`
 	URL         *string `json:"url" validate:"required,url"`
 	CategoryID  *string `json:"categoryID" validate:"required,uuid4"`
+	UsuarioID   *string `json:"usuarioID" validate:"required,uuid4"`
 }
 
 func (i *VideoInput) prepare() {
@@ -24,6 +25,10 @@ func (i *VideoInput) prepare() {
 
 	if i.CategoryID != nil {
 		*i.CategoryID = strings.ToLower(strings.TrimSpace(*i.CategoryID))
+	}
+
+	if i.UsuarioID != nil {
+		*i.UsuarioID = strings.ToLower(strings.TrimSpace(*i.UsuarioID))
 	}
 }
 
