@@ -19,6 +19,10 @@ func NewVideoRepository(db *gorm.DB) *VideoRepository {
 func (r VideoRepository) FindAll(query *domain.VideoQuery) ([]domain.Video, error) {
 	var videos []domain.Video
 
+	if usuarioId := query.UsuarioID(); usuarioId != nil {
+		r.db = r.db.Where("usuario_id = ?", usuarioId.ToString())
+	}
+
 	if search := query.Search(); search != nil {
 		r.db = r.db.Where("title LIKE ?", search)
 		r.db = r.db.Or("description LIKE ?", search)
