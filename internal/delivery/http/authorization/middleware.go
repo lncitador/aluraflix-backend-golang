@@ -54,7 +54,7 @@ func (h AuthHandlers) AuthMiddleware(c *gin.Context) {
 		return
 	}
 
-	c.Set("usuario", usuario)
+	c.Set("user", usuario)
 	c.Next()
 }
 
