@@ -14,22 +14,22 @@ type Error interface {
 	GetDescription() string
 }
 
-type errorHandle struct {
-	Code        int       `json:"Code"`
-	Message     string    `json:"Message"`
-	Description *string   `json:"Description,omitempty"`
+type handle struct {
+	Code        int       `json:"code"`
+	Message     string    `json:"message"`
+	Description *string   `json:"description,omitempty"`
 	Fields      *[]string `json:"fields,omitempty"`
 }
 
-func (e errorHandle) Error() string {
+func (e handle) Error() string {
 	return e.Message
 }
 
-func (e errorHandle) Status() int {
+func (e handle) Status() int {
 	return e.Code
 }
 
-func (e errorHandle) GetDescription() string {
+func (e handle) GetDescription() string {
 	if e.Description != nil {
 		return *e.Description
 	}
@@ -37,8 +37,8 @@ func (e errorHandle) GetDescription() string {
 	return ""
 }
 
-func NewError(code int, message string, description string) *errorHandle {
-	return &errorHandle{
+func NewError(code int, message string, description string) *handle {
+	return &handle{
 		Code:        code,
 		Message:     message,
 		Description: &description,
@@ -46,9 +46,9 @@ func NewError(code int, message string, description string) *errorHandle {
 	}
 }
 
-func NewErrorByInternal(err error) *errorHandle {
+func NewErrorByInternal(err error) *handle {
 	description := err.Error()
-	return &errorHandle{
+	return &handle{
 		Code:        http.StatusInternalServerError,
 		Message:     "Internal error",
 		Description: &description,
@@ -56,7 +56,7 @@ func NewErrorByInternal(err error) *errorHandle {
 	}
 }
 
-func NewErrorByValidation(err error) *errorHandle {
+func NewErrorByValidation(err error) *handle {
 	var fields validator.ValidationErrors
 	var field validator.FieldError
 
@@ -69,7 +69,7 @@ func NewErrorByValidation(err error) *errorHandle {
 		errs = append(errs, field.Error())
 	} else {
 		description := err.Error()
-		return &errorHandle{
+		return &handle{
 			Code:        http.StatusUnprocessableEntity,
 			Message:     "Validation error",
 			Description: &description,
@@ -77,7 +77,7 @@ func NewErrorByValidation(err error) *errorHandle {
 		}
 	}
 
-	return &errorHandle{
+	return &handle{
 		Code:        http.StatusUnprocessableEntity,
 		Message:     "Validation error",
 		Description: nil,
@@ -85,9 +85,9 @@ func NewErrorByValidation(err error) *errorHandle {
 	}
 }
 
-func NewErrorByNotFound(err error) *errorHandle {
+func NewErrorByNotFound(err error) *handle {
 	description := err.Error()
-	return &errorHandle{
+	return &handle{
 		Code:        http.StatusNotFound,
 		Message:     "Not found",
 		Description: &description,
@@ -95,9 +95,9 @@ func NewErrorByNotFound(err error) *errorHandle {
 	}
 }
 
-func NewErrorByUnauthorized(err error) *errorHandle {
+func NewErrorByUnauthorized(err error) *handle {
 	description := err.Error()
-	return &errorHandle{
+	return &handle{
 		Code:        http.StatusUnauthorized,
 		Message:     "Unauthorized",
 		Description: &description,
@@ -105,9 +105,9 @@ func NewErrorByUnauthorized(err error) *errorHandle {
 	}
 }
 
-func NewErrorByForbidden(err error) *errorHandle {
+func NewErrorByForbidden(err error) *handle {
 	description := err.Error()
-	return &errorHandle{
+	return &handle{
 		Code:        http.StatusForbidden,
 		Message:     "Forbidden",
 		Description: &description,
@@ -115,9 +115,9 @@ func NewErrorByForbidden(err error) *errorHandle {
 	}
 }
 
-func NewErrorByBadRequest(err error) *errorHandle {
+func NewErrorByBadRequest(err error) *handle {
 	description := err.Error()
-	return &errorHandle{
+	return &handle{
 		Code:        http.StatusBadRequest,
 		Message:     "Bad request",
 		Description: &description,
