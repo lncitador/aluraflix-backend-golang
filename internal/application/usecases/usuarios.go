@@ -63,7 +63,7 @@ func (u *UsuariosUseCase) Update(id *vo.UniqueEntityID, data domain.UsuarioInput
 	return usuario.MapTo(), nil
 }
 
-func (u *UsuariosUseCase) Delete(id *vo.UniqueEntityID) error {
+func (u *UsuariosUseCase) Delete(id *vo.UniqueEntityID) Error {
 	if err := u.UsuarioRepositoryContract.Delete(id); err != nil {
 		return err
 	}
