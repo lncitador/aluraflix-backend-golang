@@ -55,6 +55,13 @@ func (h AuthHandlers) AuthMiddleware(c *gin.Context) {
 		return
 	}
 
+	userId, err := vo.NewUniqueEntityID(&usuario.ID)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.Set("userId", userId)
 	c.Set("user", usuario)
 	c.Next()
 }
