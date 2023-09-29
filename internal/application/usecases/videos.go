@@ -57,6 +57,15 @@ func (v VideosUseCase) Update(id *vo.UniqueEntityID, data domain.VideoInput) (*d
 		return nil, err
 	}
 
+	userId, err := vo.NewUniqueEntityID(data.UsuarioID)
+	if err != nil {
+		return nil, err
+	}
+
+	if !video.UsuarioID.Equals(userId) {
+		return nil, NewError(http.StatusUnauthorized, "Unauthorized", "You are not allowed to update this video.")
+	}
+
 	if err := video.Fill(data); err != nil {
 		return nil, err
 	}
