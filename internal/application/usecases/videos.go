@@ -77,7 +77,16 @@ func (v VideosUseCase) Update(id *vo.UniqueEntityID, data domain.VideoInput) (*d
 	return video.MapTo(), nil
 }
 
-func (v VideosUseCase) Delete(id *vo.UniqueEntityID) Error {
+func (v VideosUseCase) Delete(id *vo.UniqueEntityID, userId *vo.UniqueEntityID) Error {
+	video, err := v.VideoRepositoryContract.FindById(id)
+	if err != nil {
+		return err
+	}
+
+	if !video.UsuarioID.Equals(userId) {
+		return NewError(http.StatusUnauthorized, "Unauthorized", "You are not allowed to delete this video.")
+	}
+
 	if err := v.VideoRepositoryContract.Delete(id); err != nil {
 		return err
 	}
