@@ -5,6 +5,7 @@ import (
 	"github.com/lncitador/alura-flix-backend/internal/domain"
 	vo "github.com/lncitador/alura-flix-backend/internal/domain/value-objects"
 	. "github.com/lncitador/alura-flix-backend/pkg/errors"
+	"net/http"
 )
 
 type VideosUseCase struct {
@@ -24,10 +25,14 @@ func (v VideosUseCase) FindAll(query *domain.VideoQuery) (*[]domain.VideoDto, Er
 	return domain.VideosToDto(videos), nil
 }
 
-func (v VideosUseCase) FindById(id *vo.UniqueEntityID) (*domain.VideoDto, Error) {
+func (v VideosUseCase) FindById(id *vo.UniqueEntityID, user *vo.UniqueEntityID) (*domain.VideoDto, Error) {
 	video, err := v.VideoRepositoryContract.FindById(id)
 	if err != nil {
 		return nil, err
+	}
+
+	if !video.UsuarioID.Equals(user) {
+		return nil, NewError(http.StatusUnauthorized, "Unauthorized", "You are not allowed to access this video.")
 	}
 
 	return video.MapTo(), nil
