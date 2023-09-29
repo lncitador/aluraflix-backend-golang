@@ -3,6 +3,7 @@ package domain
 import (
 	"github.com/go-playground/validator/v10"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/lncitador/alura-flix-backend/pkg/errors"
 	"golang.org/x/crypto/bcrypt"
 	"os"
 	"time"
@@ -17,19 +18,19 @@ type Usuario struct {
 
 const TokenMaxAge = time.Hour * 6
 
-func NewUsuario(input UsuarioInput) (*Usuario, error) {
+func NewUsuario(input UsuarioInput) (*Usuario, errors.Error) {
 	usuario := Usuario{}
 	usuario.prepare()
 
 	if err := input.validate(); err != nil {
-		return nil, err
+		return nil, errors.NewErrorByValidation(err)
 	}
 
 	if input.Password != nil {
 		hash, err := bcrypt.GenerateFromPassword([]byte(*input.Password), bcrypt.DefaultCost)
 
 		if err != nil {
-			return nil, err
+			return nil, errors.NewErrorByInternal(err)
 		}
 
 		usuario.Password = string(hash)
@@ -51,7 +52,7 @@ func (u *Usuario) MapTo() *UsuarioDto {
 	}
 }
 
-func (u *Usuario) Fill(input UsuarioInput) error {
+func (u *Usuario) Fill(input UsuarioInput) errors.Error {
 	err := validate.Struct(input)
 
 	if err != nil {
@@ -59,7 +60,7 @@ func (u *Usuario) Fill(input UsuarioInput) error {
 			if err.Tag() == "required" {
 				continue
 			}
-			return err
+			return errors.NewErrorByValidation(err)
 		}
 	}
 
@@ -78,11 +79,15 @@ func (u *Usuario) Fill(input UsuarioInput) error {
 	return nil
 }
 
-func (u *Usuario) ComparePassword(password *string) error {
-	return bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(*password))
+func (u *Usuario) ComparePassword(password *string) errors.Error {
+	if err := bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(*password)); err != nil {
+		return errors.NewErrorByInternal(err)
+	}
+
+	return nil
 }
 
-func (u *Usuario) GenerateToken() (*string, error) {
+func (u *Usuario) GenerateToken() (*string, errors.Error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"sub":  u.ID.ToString(),
 		"name": u.Name,
@@ -96,7 +101,7 @@ func (u *Usuario) GenerateToken() (*string, error) {
 
 	tokenString, err := token.SignedString([]byte(secret))
 	if err != nil {
-		return nil, err
+		return nil, errors.NewErrorByInternal(err)
 	}
 
 	return &tokenString, nil

@@ -21,7 +21,7 @@ func (q *VideoQuery) UsuarioID() *vo.UniqueEntityID {
 	return q.usuarioId
 }
 
-func (q *VideoQuery) SetUsuarioID(value string) *errors.Error {
+func (q *VideoQuery) SetUsuarioID(value string) errors.Error {
 	if value != "" {
 		id, err := vo.NewUniqueEntityID(&value)
 		if err != nil {
@@ -48,7 +48,7 @@ func (q *VideoQuery) Search() *string {
 	return q.search
 }
 
-func (q *VideoQuery) SetPage(value string) *errors.Error {
+func (q *VideoQuery) SetPage(value string) errors.Error {
 	if value != "" {
 		if page, err := strconv.Atoi(value); err != nil {
 			return errors.NewError(http.StatusUnprocessableEntity, "Validation error", "page must be a number")
@@ -68,7 +68,7 @@ func (q *VideoQuery) Page() *int {
 	return q.page
 }
 
-func (q *VideoQuery) SetLimit(value string) *errors.Error {
+func (q *VideoQuery) SetLimit(value string) errors.Error {
 	if value != "" {
 		if limit, err := strconv.Atoi(value); err != nil {
 			return errors.NewError(http.StatusUnprocessableEntity, "Validation error", "limit must be a number")

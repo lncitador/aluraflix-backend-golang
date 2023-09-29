@@ -5,18 +5,19 @@ import (
 	"fmt"
 	"github.com/google/uuid"
 	"github.com/lncitador/alura-flix-backend/internal/domain/value-objects/errors"
+	. "github.com/lncitador/alura-flix-backend/pkg/errors"
 )
 
 type UniqueEntityID ValueObject[uuid.UUID]
 
-func NewUniqueEntityID(value *string) (*UniqueEntityID, error) {
+func NewUniqueEntityID(value *string) (*UniqueEntityID, Error) {
 	if value == nil {
 		return &UniqueEntityID{value: uuid.New()}, nil
 	}
 
 	id, err := uuid.Parse(*value)
 	if err != nil {
-		return nil, err
+		return nil, NewErrorByBadRequest(err)
 	}
 
 	return &UniqueEntityID{value: id}, nil

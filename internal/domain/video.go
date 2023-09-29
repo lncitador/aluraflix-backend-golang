@@ -18,7 +18,7 @@ type Video struct {
 }
 
 // NewVideo creates a new Video instance
-func NewVideo(input VideoInput) (*Video, *errors.Error) {
+func NewVideo(input VideoInput) (*Video, errors.Error) {
 	video := Video{}
 	video.prepare()
 
@@ -71,7 +71,7 @@ func (v *Video) MapTo() *VideoDto {
 }
 
 // Fill fills Video with VideoInput data
-func (v *Video) Fill(input VideoInput) *errors.Error {
+func (v *Video) Fill(input VideoInput) errors.Error {
 	err := validate.Struct(input)
 
 	if err != nil {

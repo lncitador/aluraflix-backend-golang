@@ -3,6 +3,7 @@ package domain
 import (
 	"github.com/go-playground/validator/v10"
 	vo "github.com/lncitador/alura-flix-backend/internal/domain/value-objects"
+	. "github.com/lncitador/alura-flix-backend/pkg/errors"
 )
 
 type Categoria struct {
@@ -14,12 +15,12 @@ type Categoria struct {
 }
 
 // NewCategoria creates a new Categoria instance
-func NewCategoria(input CategoriaInput) (*Categoria, error) {
+func NewCategoria(input CategoriaInput) (*Categoria, Error) {
 	categoria := Categoria{}
 	categoria.prepare()
 
 	if err := input.validate(); err != nil {
-		return nil, err
+		return nil, NewErrorByValidation(err)
 	}
 
 	usuarioId, err := vo.NewUniqueEntityID(input.UsuarioID)
@@ -53,7 +54,7 @@ func (c *Categoria) MapTo() *CategoriaDto {
 }
 
 // Fill updates the Categoria instance
-func (c *Categoria) Fill(input CategoriaInput) error {
+func (c *Categoria) Fill(input CategoriaInput) Error {
 	err := validate.Struct(input)
 
 	if err != nil {
@@ -61,7 +62,7 @@ func (c *Categoria) Fill(input CategoriaInput) error {
 			if err.Tag() == "required" {
 				continue
 			}
-			return err
+			return NewErrorByValidation(err)
 		}
 	}
 

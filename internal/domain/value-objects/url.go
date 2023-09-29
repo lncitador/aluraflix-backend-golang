@@ -4,25 +4,27 @@ import (
 	"database/sql/driver"
 	"fmt"
 	"github.com/lncitador/alura-flix-backend/internal/domain/value-objects/errors"
+	. "github.com/lncitador/alura-flix-backend/pkg/errors"
+	"net/http"
 	"regexp"
 )
 
 type URL ValueObject[string]
 
-func NewURL(value string) (*URL, error) {
+func NewURL(value string) (*URL, Error) {
 	rgx := `^(http|https):\/\/[a-zA-Z0-9]+([\-\.]{1}[a-zA-Z0-9]+)*\.[a-zA-Z]{2,5}`
 
 	if len(value) == 0 {
-		return nil, fmt.Errorf(errors.URL_VAZIO)
+		return nil, NewError(http.StatusBadRequest, errors.URL_VAZIO, "")
 	}
 
 	match, err := regexp.MatchString(rgx, value)
 	if err != nil {
-		return nil, err
+		return nil, NewErrorByBadRequest(err)
 	}
 
 	if !match {
-		return nil, fmt.Errorf(errors.URL_INVALIDO)
+		return nil, NewError(http.StatusBadRequest, errors.URL_INVALIDO, "")
 	}
 
 	return &URL{value: value}, nil

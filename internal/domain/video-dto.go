@@ -20,7 +20,7 @@ type VideoDto struct {
 }
 
 // MapFrom maps VideoDto to Video struct
-func (d VideoDto) MapFrom() (*Video, *errors.Error) {
+func (d VideoDto) MapFrom() (*Video, errors.Error) {
 	id, err := vo.NewUniqueEntityID(&d.ID)
 	if err != nil {
 		return nil, errors.NewErrorByValidation(err)
