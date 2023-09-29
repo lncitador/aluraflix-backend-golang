@@ -17,7 +17,7 @@ func NewCategoriasUseCase(contract repositories.CategoriaRepositoryContract) *Ca
 	return &CategoriasUseCase{contract}
 }
 
-func (c *CategoriasUseCase) FindAll(query *domain.CategoriaQuery) (*[]domain.CategoriaDto, *Error) {
+func (c *CategoriasUseCase) FindAll(query *domain.CategoriaQuery) (*[]domain.CategoriaDto, Error) {
 	categorias, err := c.CategoriaRepositoryContract.FindAll(query)
 	if err != nil {
 		return nil, err
@@ -26,7 +26,7 @@ func (c *CategoriasUseCase) FindAll(query *domain.CategoriaQuery) (*[]domain.Cat
 	return domain.CategoriasToDto(categorias), nil
 }
 
-func (c *CategoriasUseCase) FindById(id *vo.UniqueEntityID) (*domain.CategoriaDto, *Error) {
+func (c *CategoriasUseCase) FindById(id *vo.UniqueEntityID) (*domain.CategoriaDto, Error) {
 	categoria, err := c.CategoriaRepositoryContract.FindById(id)
 	if err != nil {
 		return nil, err
@@ -35,7 +35,7 @@ func (c *CategoriasUseCase) FindById(id *vo.UniqueEntityID) (*domain.CategoriaDt
 	return categoria.MapTo(), nil
 }
 
-func (c *CategoriasUseCase) Create(data domain.CategoriaInput) (*domain.CategoriaDto, *Error) {
+func (c *CategoriasUseCase) Create(data domain.CategoriaInput) (*domain.CategoriaDto, Error) {
 	categoria, err := domain.NewCategoria(data)
 	if err != nil {
 		return nil, err
@@ -48,7 +48,7 @@ func (c *CategoriasUseCase) Create(data domain.CategoriaInput) (*domain.Categori
 	return categoria.MapTo(), nil
 }
 
-func (c *CategoriasUseCase) Update(id *vo.UniqueEntityID, data domain.CategoriaInput) (*domain.CategoriaDto, *Error) {
+func (c *CategoriasUseCase) Update(id *vo.UniqueEntityID, data domain.CategoriaInput) (*domain.CategoriaDto, Error) {
 	categoria, err := c.CategoriaRepositoryContract.FindById(id)
 	if err != nil {
 		return nil, err
@@ -74,7 +74,7 @@ func (c *CategoriasUseCase) Update(id *vo.UniqueEntityID, data domain.CategoriaI
 	return categoria.MapTo(), nil
 }
 
-func (c *CategoriasUseCase) Delete(id *vo.UniqueEntityID) error {
+func (c *CategoriasUseCase) Delete(id *vo.UniqueEntityID) Error {
 	if err := c.CategoriaRepositoryContract.Delete(id); err != nil {
 		return err
 	}

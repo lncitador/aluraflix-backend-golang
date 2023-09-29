@@ -15,7 +15,7 @@ func NewVideosUseCase(contract repositories.VideoRepositoryContract) *VideosUseC
 	return &VideosUseCase{contract}
 }
 
-func (v VideosUseCase) FindAll(query *domain.VideoQuery) (*[]domain.VideoDto, *Error) {
+func (v VideosUseCase) FindAll(query *domain.VideoQuery) (*[]domain.VideoDto, Error) {
 	videos, err := v.VideoRepositoryContract.FindAll(query)
 	if err != nil {
 		return nil, err
@@ -24,7 +24,7 @@ func (v VideosUseCase) FindAll(query *domain.VideoQuery) (*[]domain.VideoDto, *E
 	return domain.VideosToDto(videos), nil
 }
 
-func (v VideosUseCase) FindById(id *vo.UniqueEntityID) (*domain.VideoDto, *Error) {
+func (v VideosUseCase) FindById(id *vo.UniqueEntityID) (*domain.VideoDto, Error) {
 	video, err := v.VideoRepositoryContract.FindById(id)
 	if err != nil {
 		return nil, err
@@ -33,7 +33,7 @@ func (v VideosUseCase) FindById(id *vo.UniqueEntityID) (*domain.VideoDto, *Error
 	return video.MapTo(), nil
 }
 
-func (v VideosUseCase) Create(data domain.VideoInput) (*domain.VideoDto, *Error) {
+func (v VideosUseCase) Create(data domain.VideoInput) (*domain.VideoDto, Error) {
 	video, err := domain.NewVideo(data)
 	if err != nil {
 		return nil, err
@@ -46,7 +46,7 @@ func (v VideosUseCase) Create(data domain.VideoInput) (*domain.VideoDto, *Error)
 	return video.MapTo(), nil
 }
 
-func (v VideosUseCase) Update(id *vo.UniqueEntityID, data domain.VideoInput) (*domain.VideoDto, *Error) {
+func (v VideosUseCase) Update(id *vo.UniqueEntityID, data domain.VideoInput) (*domain.VideoDto, Error) {
 	video, err := v.VideoRepositoryContract.FindById(id)
 	if err != nil {
 		return nil, err
@@ -63,7 +63,7 @@ func (v VideosUseCase) Update(id *vo.UniqueEntityID, data domain.VideoInput) (*d
 	return video.MapTo(), nil
 }
 
-func (v VideosUseCase) Delete(id *vo.UniqueEntityID) *Error {
+func (v VideosUseCase) Delete(id *vo.UniqueEntityID) Error {
 	if err := v.VideoRepositoryContract.Delete(id); err != nil {
 		return err
 	}

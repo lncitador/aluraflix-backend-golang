@@ -4,6 +4,7 @@ import (
 	"github.com/lncitador/alura-flix-backend/internal/application/repositories"
 	"github.com/lncitador/alura-flix-backend/internal/domain"
 	vo "github.com/lncitador/alura-flix-backend/internal/domain/value-objects"
+	. "github.com/lncitador/alura-flix-backend/pkg/errors"
 )
 
 type UsuariosUseCase struct {
@@ -14,7 +15,7 @@ func NewUsuariosUseCase(repository repositories.UsuarioRepositoryContract) *Usua
 	return &UsuariosUseCase{repository}
 }
 
-func (u *UsuariosUseCase) FindAll() (*[]domain.UsuarioDto, error) {
+func (u *UsuariosUseCase) FindAll() (*[]domain.UsuarioDto, Error) {
 	usuarios, err := u.UsuarioRepositoryContract.FindAll(nil)
 	if err != nil {
 		return nil, err
@@ -23,7 +24,7 @@ func (u *UsuariosUseCase) FindAll() (*[]domain.UsuarioDto, error) {
 	return domain.UsuariosToDto(usuarios), nil
 }
 
-func (u *UsuariosUseCase) FindById(id *vo.UniqueEntityID) (*domain.UsuarioDto, error) {
+func (u *UsuariosUseCase) FindById(id *vo.UniqueEntityID) (*domain.UsuarioDto, Error) {
 	usuario, err := u.UsuarioRepositoryContract.FindById(id)
 	if err != nil {
 		return nil, err
@@ -32,7 +33,7 @@ func (u *UsuariosUseCase) FindById(id *vo.UniqueEntityID) (*domain.UsuarioDto, e
 	return usuario.MapTo(), nil
 }
 
-func (u *UsuariosUseCase) Create(data domain.UsuarioInput) (*domain.UsuarioDto, error) {
+func (u *UsuariosUseCase) Create(data domain.UsuarioInput) (*domain.UsuarioDto, Error) {
 	usuario, err := domain.NewUsuario(data)
 	if err != nil {
 		return nil, err
@@ -45,7 +46,7 @@ func (u *UsuariosUseCase) Create(data domain.UsuarioInput) (*domain.UsuarioDto, 
 	return usuario.MapTo(), nil
 }
 
-func (u *UsuariosUseCase) Update(id *vo.UniqueEntityID, data domain.UsuarioInput) (*domain.UsuarioDto, error) {
+func (u *UsuariosUseCase) Update(id *vo.UniqueEntityID, data domain.UsuarioInput) (*domain.UsuarioDto, Error) {
 	usuario, err := u.UsuarioRepositoryContract.FindById(id)
 	if err != nil {
 		return nil, err
@@ -70,7 +71,7 @@ func (u *UsuariosUseCase) Delete(id *vo.UniqueEntityID) error {
 	return nil
 }
 
-func (u *UsuariosUseCase) Signin(email string, password string) (*string, error) {
+func (u *UsuariosUseCase) Signin(email string, password string) (*string, Error) {
 	credentials, err := domain.NewCredential(email, password)
 	if err != nil {
 		return nil, err
