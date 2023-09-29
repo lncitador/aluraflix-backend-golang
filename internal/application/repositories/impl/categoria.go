@@ -72,6 +72,14 @@ func (r CategoriaRepository) Update(data domain.Categoria) Error {
 }
 
 func (r CategoriaRepository) Delete(id *vo.UniqueEntityID) Error {
+	if _, err := r.FindById(id); err != nil {
+		if err.Status() == http.StatusNotFound {
+			return NewError(http.StatusNotFound, "Categoria not found", "to exclude a category it must exist")
+		}
+
+		return err
+	}
+
 	if err := r.db.Delete(&domain.Categoria{}, id).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return NewErrorByNotFound(err)
