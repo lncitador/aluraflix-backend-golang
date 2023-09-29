@@ -13,12 +13,17 @@ func (h VideoHandlers) update(c *gin.Context) {
 		c.JSON(err.Status(), gin.H{"error": err})
 		return
 	}
-
+	user, _ := c.Get("user")
 	var dto domain.VideoInput
 	if err := c.ShouldBindJSON(&dto); err != nil {
-		c.JSON(400, gin.H{"error": err})
+		c.JSON(400, gin.H{"error": gin.H{
+			"message": "Invalid data",
+			"details": err.Error(),
+		}})
 		return
 	}
+
+	dto.UsuarioID = &user.(*domain.UsuarioDto).ID
 
 	video, err := h.useCase.Update(uid, dto)
 	if err != nil {
