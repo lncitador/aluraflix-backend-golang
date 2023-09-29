@@ -17,7 +17,7 @@ func NewVideoRepository(db *gorm.DB) *VideoRepository {
 	return &VideoRepository{db}
 }
 
-func (r VideoRepository) FindAll(query *domain.VideoQuery) ([]domain.Video, *Error) {
+func (r VideoRepository) FindAll(query *domain.VideoQuery) ([]domain.Video, Error) {
 	var videos []domain.Video
 
 	if usuarioId := query.UsuarioID(); usuarioId != nil {
@@ -42,7 +42,7 @@ func (r VideoRepository) FindAll(query *domain.VideoQuery) ([]domain.Video, *Err
 	return videos, nil
 }
 
-func (r VideoRepository) FindById(id *v.UniqueEntityID) (*domain.Video, *Error) {
+func (r VideoRepository) FindById(id *v.UniqueEntityID) (*domain.Video, Error) {
 	if id == nil {
 		return nil, NewError(http.StatusBadRequest, e.ErrVideoIdIsNull, "")
 	}
@@ -55,7 +55,7 @@ func (r VideoRepository) FindById(id *v.UniqueEntityID) (*domain.Video, *Error) 
 	return &video, nil
 }
 
-func (r VideoRepository) Create(data domain.Video) *Error {
+func (r VideoRepository) Create(data domain.Video) Error {
 	if err := r.db.Create(&data).Error; err != nil {
 		return NewErrorByBadRequest(err)
 	}
@@ -63,7 +63,7 @@ func (r VideoRepository) Create(data domain.Video) *Error {
 	return nil
 }
 
-func (r VideoRepository) Update(data domain.Video) *Error {
+func (r VideoRepository) Update(data domain.Video) Error {
 	if err := r.db.Save(&data).Error; err != nil {
 		return NewErrorByBadRequest(err)
 	}
@@ -71,7 +71,7 @@ func (r VideoRepository) Update(data domain.Video) *Error {
 	return nil
 }
 
-func (r VideoRepository) Delete(id *v.UniqueEntityID) *Error {
+func (r VideoRepository) Delete(id *v.UniqueEntityID) Error {
 	if id == nil {
 		return NewError(http.StatusBadRequest, e.ErrVideoIdIsNull, "")
 	}

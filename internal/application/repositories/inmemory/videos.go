@@ -1,10 +1,11 @@
 package inmemory
 
 import (
-	"errors"
 	e "github.com/lncitador/alura-flix-backend/internal/application/repositories/errors"
 	"github.com/lncitador/alura-flix-backend/internal/domain"
 	v "github.com/lncitador/alura-flix-backend/internal/domain/value-objects"
+	. "github.com/lncitador/alura-flix-backend/pkg/errors"
+	"net/http"
 )
 
 type VideoRepository struct {
@@ -17,7 +18,7 @@ func NewVideoRepository(relation *CategoriaRepository) *VideoRepository {
 	return &VideoRepository{db, relation}
 }
 
-func (r *VideoRepository) FindAll(query *domain.VideoQuery) ([]domain.Video, error) {
+func (r *VideoRepository) FindAll(query *domain.VideoQuery) ([]domain.Video, Error) {
 	var videos []domain.Video
 	if search := query.Search(); search != nil {
 		for _, video := range r.db {
@@ -51,9 +52,9 @@ func (r *VideoRepository) FindAll(query *domain.VideoQuery) ([]domain.Video, err
 	return r.db, nil
 }
 
-func (r *VideoRepository) FindById(id *v.UniqueEntityID) (*domain.Video, error) {
+func (r *VideoRepository) FindById(id *v.UniqueEntityID) (*domain.Video, Error) {
 	if id == nil {
-		return nil, errors.New(e.ErrVideoIdIsNull)
+		return nil, NewError(http.StatusBadRequest, e.ErrVideoIdIsNull, "")
 	}
 
 	for _, video := range r.db {
@@ -62,16 +63,16 @@ func (r *VideoRepository) FindById(id *v.UniqueEntityID) (*domain.Video, error) 
 		}
 	}
 
-	return nil, errors.New(e.ErrFindByIdVideo)
+	return nil, NewError(http.StatusNotFound, e.ErrFindByIdVideo, "")
 }
 
-func (r *VideoRepository) Create(data domain.Video) error {
+func (r *VideoRepository) Create(data domain.Video) Error {
 	if _, err := r.FindById(data.ID); err == nil {
-		return errors.New(e.ErrVideoAlreadyExists)
+		return NewError(http.StatusConflict, e.ErrVideoAlreadyExists, "")
 	}
 
 	if _, err := r.relation.FindById(data.CategoryID); err != nil {
-		return errors.New(e.ErrCategoriaNotFound)
+		return NewError(http.StatusNotFound, e.ErrCategoriaNotFound, "")
 	}
 
 	r.db = append(r.db, data)
@@ -79,7 +80,7 @@ func (r *VideoRepository) Create(data domain.Video) error {
 	return nil
 }
 
-func (r *VideoRepository) Update(data domain.Video) error {
+func (r *VideoRepository) Update(data domain.Video) Error {
 	for i, video := range r.db {
 		if video.ID.Equals(data.ID) {
 			r.db[i] = data
@@ -88,10 +89,10 @@ func (r *VideoRepository) Update(data domain.Video) error {
 		}
 	}
 
-	return errors.New(e.ErrUpdateVideo)
+	return NewError(http.StatusNotFound, e.ErrUpdateVideo, "")
 }
 
-func (r *VideoRepository) Delete(id *v.UniqueEntityID) error {
+func (r *VideoRepository) Delete(id *v.UniqueEntityID) Error {
 	for i, video := range r.db {
 		if video.ID.Equals(id) {
 			r.db = append(r.db[:i], r.db[i+1:]...)
@@ -100,5 +101,5 @@ func (r *VideoRepository) Delete(id *v.UniqueEntityID) error {
 		}
 	}
 
-	return errors.New(e.ErrDeleteVideo)
+	return NewError(http.StatusNotFound, e.ErrDeleteVideo, "")
 }

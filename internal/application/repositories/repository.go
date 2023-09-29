@@ -6,9 +6,9 @@ import (
 )
 
 type RepositoryContract[Model any, Query any] interface {
-	FindAll(query Query) ([]Model, *Error)
-	FindById(id *vo.UniqueEntityID) (*Model, *Error)
-	Create(data Model) *Error
-	Update(data Model) *Error
-	Delete(id *vo.UniqueEntityID) *Error
+	FindAll(query Query) ([]Model, Error)
+	FindById(id *vo.UniqueEntityID) (*Model, Error)
+	Create(data Model) Error
+	Update(data Model) Error
+	Delete(id *vo.UniqueEntityID) Error
 }

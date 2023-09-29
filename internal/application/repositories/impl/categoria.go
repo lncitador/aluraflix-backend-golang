@@ -18,7 +18,7 @@ func NewCategoriaRepository(db *gorm.DB) *CategoriaRepository {
 	return &CategoriaRepository{db}
 }
 
-func (r CategoriaRepository) FindAll(query *domain.CategoriaQuery) ([]domain.Categoria, *Error) {
+func (r CategoriaRepository) FindAll(query *domain.CategoriaQuery) ([]domain.Categoria, Error) {
 	if usuarioID := query.UsuarioID(); usuarioID != nil {
 		r.db = r.db.Where("usuario_id = ?", usuarioID)
 	}
@@ -35,7 +35,7 @@ func (r CategoriaRepository) FindAll(query *domain.CategoriaQuery) ([]domain.Cat
 	return categorias, nil
 }
 
-func (r CategoriaRepository) FindById(id *vo.UniqueEntityID) (*domain.Categoria, *Error) {
+func (r CategoriaRepository) FindById(id *vo.UniqueEntityID) (*domain.Categoria, Error) {
 	if id == nil {
 		return nil, NewError(http.StatusBadRequest, e.ErrCategoriaIdIsNull, "")
 	}
@@ -51,7 +51,7 @@ func (r CategoriaRepository) FindById(id *vo.UniqueEntityID) (*domain.Categoria,
 	return &categoria, nil
 }
 
-func (r CategoriaRepository) Create(data domain.Categoria) *Error {
+func (r CategoriaRepository) Create(data domain.Categoria) Error {
 	if err := r.db.Create(&data).Error; err != nil {
 		return NewErrorByBadRequest(err)
 	}
@@ -59,7 +59,7 @@ func (r CategoriaRepository) Create(data domain.Categoria) *Error {
 	return nil
 }
 
-func (r CategoriaRepository) Update(data domain.Categoria) *Error {
+func (r CategoriaRepository) Update(data domain.Categoria) Error {
 	if err := r.db.Save(&data).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return NewErrorByNotFound(err)
@@ -71,7 +71,7 @@ func (r CategoriaRepository) Update(data domain.Categoria) *Error {
 	return nil
 }
 
-func (r CategoriaRepository) Delete(id *vo.UniqueEntityID) *Error {
+func (r CategoriaRepository) Delete(id *vo.UniqueEntityID) Error {
 	if err := r.db.Delete(&domain.Categoria{}, id).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return NewErrorByNotFound(err)

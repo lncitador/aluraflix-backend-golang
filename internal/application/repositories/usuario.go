@@ -7,5 +7,5 @@ import (
 
 type UsuarioRepositoryContract interface {
 	RepositoryContract[domain.Usuario, *struct{}]
-	FindByEmail(email *string) (*domain.Usuario, *Error)
+	FindByEmail(email *string) (*domain.Usuario, Error)
 }
