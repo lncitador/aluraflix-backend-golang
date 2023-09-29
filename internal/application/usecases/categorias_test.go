@@ -124,7 +124,7 @@ func TestCategoriasUseCase_FindAll(t *testing.T) {
 	sut := setupCategoriaSut()
 
 	t.Run("should find all categorias", func(t *testing.T) {
-		categorias, err := sut.useCase.FindAll()
+		categorias, err := sut.useCase.FindAll(nil)
 		assert.Nil(t, err)
 		assert.NotNil(t, categorias)
 	})
@@ -167,7 +167,8 @@ func TestCategoriasUseCase_Update(t *testing.T) {
 		name := "Name da categoria atualizado"
 
 		data := domain.CategoriaInput{
-			Name: &name,
+			Name:      &name,
+			UsuarioID: &categoria.UsuarioID,
 		}
 
 		categoria, err = sut.useCase.Update(id, data)
