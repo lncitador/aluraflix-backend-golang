@@ -10,19 +10,19 @@ func (h VideoHandlers) update(c *gin.Context) {
 	id := c.Param("id")
 	uid, err := v.NewUniqueEntityID(&id)
 	if err != nil {
-		c.JSON(err.Status(), gin.H{"error": err.Error()})
+		c.JSON(err.Status(), gin.H{"error": err})
 		return
 	}
 
 	var dto domain.VideoInput
 	if err := c.ShouldBindJSON(&dto); err != nil {
-		c.JSON(400, gin.H{"error": err.Error()})
+		c.JSON(400, gin.H{"error": err})
 		return
 	}
 
 	video, err := h.useCase.Update(uid, dto)
 	if err != nil {
-		c.JSON(err.Status(), gin.H{"error": err.Error()})
+		c.JSON(err.Status(), gin.H{"error": err})
 		return
 	}
 

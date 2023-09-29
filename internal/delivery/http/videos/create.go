@@ -8,13 +8,13 @@ import (
 func (h VideoHandlers) create(c *gin.Context) {
 	var dto domain.VideoInput
 	if err := c.ShouldBindJSON(&dto); err != nil {
-		c.JSON(400, gin.H{"error": err.Error()})
+		c.JSON(400, gin.H{"error": err})
 		return
 	}
 
 	video, err := h.useCase.Create(dto)
 	if err != nil {
-		c.JSON(err.Status(), gin.H{"error": err.Error()})
+		c.JSON(err.Status(), gin.H{"error": err})
 		return
 	}
 

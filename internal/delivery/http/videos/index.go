@@ -11,7 +11,7 @@ func (h VideoHandlers) index(c *gin.Context) {
 
 	var query domain.VideoQuery
 	if err := query.SetUsuarioID(userId); err != nil {
-		c.JSON(err.Status(), gin.H{"error": err.Error()})
+		c.JSON(err.Status(), gin.H{"error": err})
 		return
 	}
 
@@ -20,14 +20,14 @@ func (h VideoHandlers) index(c *gin.Context) {
 
 	page := c.Query("page")
 	if err := query.SetPage(page); err != nil {
-		c.JSON(err.Status(), gin.H{"error": err.Error()})
+		c.JSON(err.Status(), gin.H{"error": err})
 		return
 	}
 
 	videos, err := h.useCase.FindAll(&query)
 
 	if err != nil {
-		c.JSON(err.Status(), gin.H{"error": err.Error()})
+		c.JSON(err.Status(), gin.H{"error": err})
 		return
 	}
 
@@ -35,7 +35,7 @@ func (h VideoHandlers) index(c *gin.Context) {
 		pagination := domain.Pagination[domain.VideoDto]{}
 
 		if err := pagination.Paginate(c.Request.URL.String(), videos, &query); err != nil {
-			c.JSON(err.Status(), gin.H{"error": err.Error()})
+			c.JSON(err.Status(), gin.H{"error": err})
 			return
 		}
 

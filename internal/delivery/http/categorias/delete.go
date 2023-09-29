@@ -9,12 +9,12 @@ func (h CategoriaHandlers) delete(c *gin.Context) {
 	id := c.Param("id")
 	uid, err := v.NewUniqueEntityID(&id)
 	if err != nil {
-		c.JSON(400, gin.H{"error": err.Error()})
+		c.JSON(400, gin.H{"error": err})
 		return
 	}
 
 	if err := h.useCase.Delete(uid); err != nil {
-		c.JSON(err.Status(), gin.H{"error": err.Error()})
+		c.JSON(err.Status(), gin.H{"error": err})
 		return
 	}
 
