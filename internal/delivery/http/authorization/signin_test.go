@@ -74,7 +74,7 @@ func TestAuthHandlers_signin(t *testing.T) {
 		w := httptest.NewRecorder()
 		sut.r.ServeHTTP(w, req)
 
-		assert.Equal(t, http.StatusUnauthorized, w.Code)
+		assert.Equal(t, http.StatusNotFound, w.Code)
 	})
 
 	t.Run("should not signin a user with another user's password", func(t *testing.T) {
