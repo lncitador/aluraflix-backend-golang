@@ -2,6 +2,7 @@ package domain
 
 import (
 	"fmt"
+	. "github.com/lncitador/alura-flix-backend/pkg/errors"
 	"net/url"
 	"strings"
 )
@@ -21,7 +22,7 @@ type PaginationContract interface {
 	Total() *int64
 }
 
-func (p *Pagination[Model]) Paginate(URL string, data *[]Model, config PaginationContract) error {
+func (p *Pagination[Model]) Paginate(URL string, data *[]Model, config PaginationContract) Error {
 	if config.Page() != nil {
 		limit := *config.Limit()
 		total := *config.Total()
@@ -35,7 +36,7 @@ func (p *Pagination[Model]) Paginate(URL string, data *[]Model, config Paginatio
 		if *config.Page() > 1 {
 			prevPage, err := url.Parse(URL)
 			if err != nil {
-				return fmt.Errorf("error to parse url")
+				return NewError(500, "Erro ao gerar paginação", err.Error())
 			}
 
 			query := prevPage.Query()
@@ -73,7 +74,7 @@ func (p *Pagination[Model]) Paginate(URL string, data *[]Model, config Paginatio
 		return nil
 	}
 
-	return fmt.Errorf("page is required")
+	return NewError(500, "Erro ao gerar paginação", "O parâmetro page não foi informado")
 }
 
 func prepare(url *url.URL, query url.Values) *string {
