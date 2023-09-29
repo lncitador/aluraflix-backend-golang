@@ -59,7 +59,7 @@ func (r *UsuariosRepository) Delete(id *vo.UniqueEntityID) Error {
 	return NewError(http.StatusNotFound, e.ErrUsuarioNotFound, "")
 }
 
-func (r *UsuariosRepository) FindByEmail(email *string) (*domain.Usuario, error) {
+func (r *UsuariosRepository) FindByEmail(email *string) (*domain.Usuario, Error) {
 	for _, usuario := range r.db {
 		if usuario.Email == *email {
 			return &usuario, nil
