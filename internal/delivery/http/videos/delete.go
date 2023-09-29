@@ -9,12 +9,12 @@ func (h VideoHandlers) delete(c *gin.Context) {
 	id := c.Param("id")
 	uid, err := vo.NewUniqueEntityID(&id)
 	if err != nil {
-		c.JSON(400, gin.H{"error": err.Error()})
+		c.JSON(err.Status(), gin.H{"error": err.Error()})
 		return
 	}
 
 	if err := h.useCase.Delete(uid); err != nil {
-		c.JSON(500, gin.H{"error": err.Error()})
+		c.JSON(err.Status(), gin.H{"error": err.Error()})
 		return
 	}
 
