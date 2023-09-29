@@ -1,0 +1,715 @@
+openapi: 3.0.3
+info:
+  title: Alura Flix
+  description: API de vídeos da Alura
+  version: 1.0.0
+  contact:
+    name: Walaff Fernandes
+    email: walaffonofre@gmail.com
+    url: https://www.github.com/lncitador
+paths:
+  /auth/signup:
+    post:
+      summary: Sign Up
+      description: Create a new user account.
+      operationId: signUpUser  # Unique operationId for this operation
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Marie Joe
+                email:
+                  type: string
+                  example: joemae@test.com
+              example:
+                name: Marie Joe
+                email: joemae@test.com
+                password: 123456
+      responses:
+        '201':
+          description: created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+        '401':
+          description: authorization failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
+        '422':
+          description: validation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        '500':
+          description: unknown server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+      security: [ ]
+
+  /auth/signin:
+    post:
+      summary: Sign In
+      description: Authenticate a user.
+      operationId: signInUser  # Unique operationId for this operation
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: joemae@test.com
+                password:
+                  type: string
+                  example: "123456"
+              example:
+                email: joemae@test.com
+                password: "123456"
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: authorization failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        '422':
+          description: validation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+      security: [ ]
+
+  /videos:
+    get:
+      summary: List all videos
+      description: Retrieve a list of all available videos.
+      operationId: listAllVideos  # Unique operationId for this operation
+      tags:
+        - Videos
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: integer
+            default: 1
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Videos'
+        '206':
+          description: successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoPaginate'
+      security: [ ]
+
+    post:
+      summary: Create video
+      description: Create a new video.
+      operationId: createVideo  # Unique operationId for this operation
+      tags:
+        - Videos
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VideoInput'
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Video'
+        '401':
+          description: authorization failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        '422':
+          description: validation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        '500':
+          description: unknown server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+      security: [ ]
+
+  /videos/{id}:
+    get:
+      summary: Show video
+      description: Retrieve information about a specific video.
+      operationId: getVideoById  # Unique operationId for this operation
+      tags:
+        - Videos
+      parameters:
+        - name: id
+          in: path
+          description: Video ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Video'
+        '401':
+          description: authorization failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        '422':
+          description: validation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        '500':
+          description: unknown server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+      security: [ ]
+
+    put:
+      summary: Update video
+      description: Update information about a specific video.
+      operationId: updateVideo  # Unique operationId for this operation
+      tags:
+        - Videos
+      parameters:
+        - name: id
+          in: path
+          description: Video ID
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VideoInput'
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Video'
+        '401':
+          description: authorization failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        '422':
+          description: validation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        '500':
+          description: unknown server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+      security: [ ]
+
+    delete:
+      summary: Delete video
+      description: Delete a specific video.
+      operationId: deleteVideo  # Unique operationId for this operation
+      tags:
+        - Videos
+      parameters:
+        - name: id
+          in: path
+          description: Video ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Video'
+        '401':
+          description: authorization failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        '422':
+          description: validation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        '500':
+          description: unknown server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+      security: [ ]
+
+  /categorias:
+    get:
+      summary: List all categorias
+      description: Retrieve a list of all available categories.
+      operationId: listAllCategories  # Unique operationId for this operation
+      tags:
+        - Categorias
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Categorias'
+        '401':
+          description: authorization failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        '422':
+          description: validation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        '500':
+          description: unknown server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+      security: [ ]
+
+    post:
+      summary: Create categoria
+      description: Create a new category.
+      operationId: createCategory  # Unique operationId for this operation
+      tags:
+        - Categorias
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoriaInput'
+      responses:
+        '201':
+          description: successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Categoria'
+        '401':
+          description: authorization failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        '422':
+          description: validation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        '500':
+          description: unknown server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+      security: [ ]
+
+  /categorias/{id}:
+    get:
+      summary: Show categoria
+      description: Retrieve information about a specific category.
+      operationId: getCategoryById  # Unique operationId for this operation
+      tags:
+        - Categorias
+      parameters:
+        - name: id
+          in: path
+          description: Categoria ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Categoria'
+        '401':
+          description: authorization failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        '422':
+          description: validation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        '500':
+          description: unknown server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+      security: [ ]
+
+    put:
+      summary: Update categoria
+      description: Update information about a specific category.
+      operationId: updateCategory  # Unique operationId for this operation
+      tags:
+        - Categorias
+      parameters:
+        - name: id
+          in: path
+          description: Categoria ID
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoriaInput'
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Categoria'
+        '401':
+          description: authorization failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        '422':
+          description: validation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        '500':
+          description: unknown server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+      security: [ ]
+
+    delete:
+      summary: Delete categoria
+      description: Delete a specific category.
+      operationId: deleteCategory  # Unique operationId for this operation
+      tags:
+        - Categorias
+      parameters:
+        - name: id
+          in: path
+          description: Categoria ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: authorization failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        '422':
+          description: validation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        '500':
+          description: unknown server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+      security: [ ]
+
+servers:
+  - url: '{base_url}/{api_v1}'
+    description: Development
+    variables:
+      base_url:
+        default: 'http://localhost:4001'
+      api_v1:
+        default: 'api/v1'
+      usuario_id:
+        default: '9ab3641f-26d2-4f56-bbda-5fba1801a094'
+
+tags:
+  - name: Auth
+    description: Rotas de autenticação
+  - name: Videos
+    description: Rotas de vídeos
+  - name: Categorias
+    description: Rotas de categorias
+
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: authorization
+
+  schemas:
+    BadRequestError:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Bad Request
+        description:
+          type: string
+          example: Description of the error (optional)
+
+    UnauthorizedError:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Bad Request
+        fields:
+          type: array
+          items:
+            type: string
+          example: [ 'email', 'password' ]
+
+    ForbiddenError:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 403
+        message:
+          type: string
+          example: Forbidden
+        description:
+          type: string
+          example: Description of the error (optional)
+
+    NotFoundError:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: Not Found
+        description:
+          type: string
+          example: Description of the error (optional)
+
+    InternalError:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Internal Server Error
+        description:
+          type: string
+          example: Description of the error (optional)
+
+    Usuario:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 9ab3641f-26d2-4f56-bbda-5fba1801a094
+        name:
+          type: string
+          example: Marie Joe
+        email:
+          type: string
+          example: "joema@test.com"
+        createdAt:
+          type: string
+          example: "2021-08-01T00:00:00.000Z"
+        updatedAt:
+          type: string
+          example: "2021-08-01T00:00:00.000Z"
+
+    Video:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 9ab3641f-26d2-4f56-bbda-5fba1801a094
+        title:
+          type: string
+          example: Creating a JSON CRUD API in Go (Gin/GORM)
+        description:
+          type: string
+          example: In this video we'll create a basic JSON CRUD API in Go lang using the popular framework Gin and the top ORM GORM. This is a great beginner tutorial if you're just starting out with Go and will introduce you to some popular libraries.
+        url:
+          type: string
+          example: https://www.youtube.com/watch?v=lf_kiH_NPvM
+        categoryId:
+          type: string
+          example: 96ce25ae-d782-4956-99cc-a3cc3dc46f20
+        userId:
+          type: string
+          example: 9ab3641f-26d2-4f56-bbda-5fba1801a094
+        createdAt:
+          type: string
+          example: "2021-08-01T00:00:00.000Z"
+        updatedAt:
+          type: string
+          example: "2021-08-01T00:00:00.000Z"
+
+    VideoInput:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Creating a JSON CRUD API in Go (Gin/GORM)
+        description:
+          type: string
+          example: In this video we'll create a basic JSON CRUD API in Go lang using the popular framework Gin and the top ORM GORM. This is a great beginner tutorial if you're just starting out with Go and will introduce you to some popular libraries.
+        url:
+          type: string
+          example: https://www.youtube.com/watch?v=lf_kiH_NPvM
+        categoryId:
+          type: string
+          example: 96ce25ae-d782-4956-99cc-a3cc3dc46f20
+
+    Categoria:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 96ce25ae-d782-4956-99cc-a3cc3dc46f20
+        name:
+          type: string
+          example: Aulas Python
+        color:
+          type: string
+          example: "#00f000"
+        userId:
+          type: string
+          example: 9ab3641f-26d2-4f56-bbda-5fba1801a094
+        createdAt:
+          type: string
+          example: "2021-08-01T00:00:00.000Z"
+        updatedAt:
+          type: string
+          example: "2021-08-01T00:00:00.000Z"
+
+    CategoriaInput:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Aulas Python
+        color:
+          type: string
+          example: "#00f000"
+        userId:
+          type: string
+          example: 9ab3641f-26d2-4f56-bbda-5fba1801a094
+
+    Videos:
+      type: array
+      items:
+        $ref: '#/components/schemas/Video'
+
+    Categorias:
+      type: array
+      items:
+        $ref: '#/components/schemas/Categoria'
+
+    VideoPaginate:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Videos'
+        firstPage:
+          type: string
+          example: http://localhost:4001/api/v1/videos?page=1
+        lastPage:
+          type: string
+          example: http://localhost:4001/api/v1/videos?page=1
+        prevPage:
+          type: string
+          example: http://localhost:4001/api/v1/videos?page=1
+        nextPage:
+          type: string
+          example: http://localhost:4001/api/v1/videos?page=2
+        totalPage:
+          type: integer
+          example: 1
