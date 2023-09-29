@@ -53,7 +53,7 @@ func (p *Pagination[Model]) Paginate(URL string, data *[]Model, config Paginatio
 			p.NextPage = *prepare(nextPage, query)
 		}
 
-		{
+		if *config.Page() > 1 {
 			firstPage, _ := url.Parse(URL)
 			query := firstPage.Query()
 			query.Set("page", "1")
@@ -61,7 +61,7 @@ func (p *Pagination[Model]) Paginate(URL string, data *[]Model, config Paginatio
 			p.FirstPage = *prepare(firstPage, query)
 		}
 
-		{
+		if *config.Page() > 1 {
 			lastPage, _ := url.Parse(URL)
 			query := lastPage.Query()
 			query.Set("page", fmt.Sprintf("%d", p.TotalPage))
