@@ -9,6 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 	vo "github.com/lncitador/alura-flix-backend/internal/domain/value-objects"
+	. "github.com/lncitador/alura-flix-backend/pkg/errors"
 )
 
 func (h AuthHandlers) AuthMiddleware(c *gin.Context) {
@@ -58,7 +59,7 @@ func (h AuthHandlers) AuthMiddleware(c *gin.Context) {
 	c.Next()
 }
 
-func parseJWT(tokenStr string) (*jwt.Token, error) {
+func parseJWT(tokenStr string) (*jwt.Token, Error) {
 	secret := os.Getenv("SECRET")
 	if secret == "" {
 		secret = "secret"
@@ -72,7 +73,7 @@ func parseJWT(tokenStr string) (*jwt.Token, error) {
 	})
 
 	if err != nil {
-		return nil, err
+		return nil, NewErrorByUnauthorized(err)
 	}
 
 	return token, nil

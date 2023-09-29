@@ -3,8 +3,6 @@ package authorization
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/lncitador/alura-flix-backend/internal/domain"
-	"github.com/lncitador/alura-flix-backend/pkg/validations"
-	"net/http"
 )
 
 func (h AuthHandlers) signup(c *gin.Context) {
@@ -15,11 +13,8 @@ func (h AuthHandlers) signup(c *gin.Context) {
 	}
 
 	usuario, err := h.useCase.Create(dto)
-	if internal, validation := validations.GetErrorsByValidation(err); validation != nil {
-		c.JSON(http.StatusUnprocessableEntity, gin.H{"error": validation})
-		return
-	} else if internal != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	if err != nil {
+		c.JSON(err.Status(), gin.H{"error": err.Error()})
 		return
 	}
 
