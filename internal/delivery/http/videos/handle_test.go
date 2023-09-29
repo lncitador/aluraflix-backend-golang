@@ -106,6 +106,12 @@ func setupSut() *Sut {
 		return nil
 	}
 
+	r.Use(func(c *gin.Context) {
+		c.Set("user", &domain.UsuarioDto{
+			ID: usuarioId,
+		})
+	})
+
 	return &Sut{
 		VideoHandlers: h,
 		URL:           "/api/v1/videos",
