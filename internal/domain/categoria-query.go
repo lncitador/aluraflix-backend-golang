@@ -1,8 +1,9 @@
 package domain
 
 import (
-	"fmt"
 	vo "github.com/lncitador/alura-flix-backend/internal/domain/value-objects"
+	. "github.com/lncitador/alura-flix-backend/pkg/errors"
+	"net/http"
 )
 
 type CategoriaQuery struct {
@@ -13,11 +14,11 @@ func (q *CategoriaQuery) UsuarioID() *vo.UniqueEntityID {
 	return q.usuarioId
 }
 
-func (q *CategoriaQuery) SetUsuarioID(value string) error {
+func (q *CategoriaQuery) SetUsuarioID(value string) Error {
 	if value != "" {
 		id, err := vo.NewUniqueEntityID(&value)
 		if err != nil {
-			return fmt.Errorf("invalid user id")
+			return err
 		}
 
 		q.usuarioId = id
@@ -25,5 +26,5 @@ func (q *CategoriaQuery) SetUsuarioID(value string) error {
 		return nil
 	}
 
-	return fmt.Errorf("user id is required")
+	return NewError(http.StatusBadRequest, "Usuário não informado", "")
 }
