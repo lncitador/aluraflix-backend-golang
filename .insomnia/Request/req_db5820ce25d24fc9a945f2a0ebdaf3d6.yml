@@ -1,0 +1,23 @@
+_id: req_db5820ce25d24fc9a945f2a0ebdaf3d6
+type: Request
+parentId: fld_269004949b6d4a689f53ae02b532fe61
+modified: 1695989792395
+created: 1695989582334
+url: "{{ _.base_url }}/{{ _.api_v1 }}/videos/557abe37-8ec6-43fe-b68f-e71ac7b4a830"
+name: Show video
+description: ""
+method: GET
+body: {}
+parameters: []
+headers:
+  - name: User-Agent
+    value: Insomnia/2023.5.7
+authentication: {}
+metaSortKey: -1695928262681.375
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

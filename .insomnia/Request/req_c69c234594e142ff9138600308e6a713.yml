@@ -1,0 +1,31 @@
+_id: req_c69c234594e142ff9138600308e6a713
+type: Request
+parentId: fld_1136ce54bba24e5daaae9c6b4c29c438
+modified: 1695993984907
+created: 1695928181740
+url: "{{ _.base_url }}/{{ _.api_v1 }}/auth/signin"
+name: Sign In
+description: ""
+method: POST
+body:
+  mimeType: application/json
+  text: |-
+    {
+    	"email": "doejoe@test.com",
+    	"password": "123456"
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+  - name: User-Agent
+    value: Insomnia/2023.5.7
+authentication: {}
+metaSortKey: -1695227880359.5
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

@@ -1,0 +1,34 @@
+_id: req_adcd18413e5441fc9fefdadce8a0f654
+type: Request
+parentId: fld_269004949b6d4a689f53ae02b532fe61
+modified: 1695935402861
+created: 1695934039322
+url: "{{ _.base_url }}/{{ _.api_v1 }}/videos"
+name: Create video
+description: ""
+method: POST
+body:
+  mimeType: application/json
+  text: >-
+    {
+    	"title": "Creating a JSON CRUD API in Go (Gin/GORM)",
+    	"description": "In this video we'll create a basic JSON CRUD API in Go lang using the popular framework Gin and the top ORM GORM. This is a great beginner tutorial if you're just starting out with Go and will introduce you to some popular libraries.",
+    	"url": "https://www.youtube.com/watch?v=lf_kiH_NPvM",
+    	"categoryId": "96ce25ae-d782-4956-99cc-a3cc3dc46f20",
+    	"usuarioId": "9ab3641f-26d2-4f56-bbda-5fba1801a094"
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+  - name: User-Agent
+    value: Insomnia/2023.5.7
+authentication: {}
+metaSortKey: -1695927944691.5
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

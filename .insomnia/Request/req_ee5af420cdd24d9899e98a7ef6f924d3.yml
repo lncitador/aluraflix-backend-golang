@@ -1,0 +1,31 @@
+_id: req_ee5af420cdd24d9899e98a7ef6f924d3
+type: Request
+parentId: fld_d7ace4ef43da4b2fbeab7435b0402d1a
+modified: 1695951917560
+created: 1695941228907
+url: "{{ _.base_url }}/{{ _.api_v1
+  }}/categorias/a1b06fc5-4176-4966-a996-ba79309b63cc"
+name: Update categoria
+description: ""
+method: PUT
+body:
+  mimeType: application/json
+  text: |-
+    {
+    	"name": "Aula Python (v2)"
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+  - name: User-Agent
+    value: Insomnia/2023.5.7
+authentication: {}
+metaSortKey: -1695927732698.25
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

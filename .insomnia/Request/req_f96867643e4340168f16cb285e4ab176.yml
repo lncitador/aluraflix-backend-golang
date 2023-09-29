@@ -1,0 +1,23 @@
+_id: req_f96867643e4340168f16cb285e4ab176
+type: Request
+parentId: fld_d7ace4ef43da4b2fbeab7435b0402d1a
+modified: 1695950255061
+created: 1695934089565
+url: "{{ _.base_url }}/{{ _.api_v1 }}/categorias"
+name: List all categorias
+description: ""
+method: GET
+body: {}
+parameters: []
+headers:
+  - name: User-Agent
+    value: Insomnia/2023.5.7
+authentication: {}
+metaSortKey: -1695928368678
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global
