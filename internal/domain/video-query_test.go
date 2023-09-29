@@ -52,14 +52,14 @@ func TestVideoQuery_SetPage(t *testing.T) {
 		q := &VideoQuery{}
 		err := q.SetPage("a")
 
-		assert.EqualError(t, err, "page must be a number")
+		assert.Equal(t, "page must be a number", err.GetDescription())
 	})
 
 	t.Run("should return error if page is less than 1", func(t *testing.T) {
 		q := &VideoQuery{}
 		err := q.SetPage("0")
 
-		assert.EqualError(t, err, "page must be greater than 0")
+		assert.Equal(t, "page must be greater than 0", err.GetDescription())
 	})
 }
 
@@ -88,21 +88,21 @@ func TestVideoQuery_SetLimit(t *testing.T) {
 		q := &VideoQuery{}
 		err := q.SetLimit("a")
 
-		assert.EqualError(t, err, "limit must be a number")
+		assert.Equal(t, "limit must be a number", err.GetDescription())
 	})
 
 	t.Run("should return error if limit is less than 10", func(t *testing.T) {
 		q := &VideoQuery{}
 		err := q.SetLimit("9")
 
-		assert.EqualError(t, err, "limit must be greater than 10")
+		assert.Equal(t, "limit must be greater than 10", err.GetDescription())
 	})
 
 	t.Run("should return error if limit is greater than 100", func(t *testing.T) {
 		q := &VideoQuery{}
 		err := q.SetLimit("101")
 
-		assert.EqualError(t, err, "limit must be less than 100")
+		assert.Equal(t, "limit must be less than 100", err.GetDescription())
 	})
 }
 
