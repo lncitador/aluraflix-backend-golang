@@ -76,6 +76,14 @@ func setupSut() *Sut {
 
 	categoria, _ := useCase.Create(constants.Truth)
 
+	r.Use(func(c *gin.Context) {
+		c.Set("user", &domain.UsuarioDto{
+			ID: usuarioId,
+		})
+
+		c.Next()
+	})
+
 	return &Sut{
 		CategoriaHandlers: h,
 		URL:               "/api/v1/categorias",
