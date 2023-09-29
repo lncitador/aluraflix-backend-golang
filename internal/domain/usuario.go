@@ -81,7 +81,7 @@ func (u *Usuario) Fill(input UsuarioInput) errors.Error {
 
 func (u *Usuario) ComparePassword(password *string) errors.Error {
 	if err := bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(*password)); err != nil {
-		return errors.NewErrorByInternal(err)
+		return errors.NewErrorByUnauthorized(err)
 	}
 
 	return nil
