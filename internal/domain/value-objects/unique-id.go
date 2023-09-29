@@ -17,7 +17,7 @@ func NewUniqueEntityID(value *string) (*UniqueEntityID, Error) {
 
 	id, err := uuid.Parse(*value)
 	if err != nil {
-		return nil, NewErrorByBadRequest(err)
+		return nil, NewErrorByValidation(err)
 	}
 
 	return &UniqueEntityID{value: id}, nil
