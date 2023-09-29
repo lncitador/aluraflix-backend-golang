@@ -2,8 +2,11 @@ package usecases
 
 import (
 	"github.com/lncitador/alura-flix-backend/internal/application/repositories"
+	e "github.com/lncitador/alura-flix-backend/internal/application/repositories/errors"
 	"github.com/lncitador/alura-flix-backend/internal/domain"
 	vo "github.com/lncitador/alura-flix-backend/internal/domain/value-objects"
+	. "github.com/lncitador/alura-flix-backend/pkg/errors"
+	"net/http"
 )
 
 type CategoriasUseCase struct {
@@ -14,7 +17,7 @@ func NewCategoriasUseCase(contract repositories.CategoriaRepositoryContract) *Ca
 	return &CategoriasUseCase{contract}
 }
 
-func (c *CategoriasUseCase) FindAll(query *domain.CategoriaQuery) (*[]domain.CategoriaDto, error) {
+func (c *CategoriasUseCase) FindAll(query *domain.CategoriaQuery) (*[]domain.CategoriaDto, *Error) {
 	categorias, err := c.CategoriaRepositoryContract.FindAll(query)
 	if err != nil {
 		return nil, err
@@ -23,7 +26,7 @@ func (c *CategoriasUseCase) FindAll(query *domain.CategoriaQuery) (*[]domain.Cat
 	return domain.CategoriasToDto(categorias), nil
 }
 
-func (c *CategoriasUseCase) FindById(id *vo.UniqueEntityID) (*domain.CategoriaDto, error) {
+func (c *CategoriasUseCase) FindById(id *vo.UniqueEntityID) (*domain.CategoriaDto, *Error) {
 	categoria, err := c.CategoriaRepositoryContract.FindById(id)
 	if err != nil {
 		return nil, err
@@ -32,7 +35,7 @@ func (c *CategoriasUseCase) FindById(id *vo.UniqueEntityID) (*domain.CategoriaDt
 	return categoria.MapTo(), nil
 }
 
-func (c *CategoriasUseCase) Create(data domain.CategoriaInput) (*domain.CategoriaDto, error) {
+func (c *CategoriasUseCase) Create(data domain.CategoriaInput) (*domain.CategoriaDto, *Error) {
 	categoria, err := domain.NewCategoria(data)
 	if err != nil {
 		return nil, err
@@ -45,10 +48,19 @@ func (c *CategoriasUseCase) Create(data domain.CategoriaInput) (*domain.Categori
 	return categoria.MapTo(), nil
 }
 
-func (c *CategoriasUseCase) Update(id *vo.UniqueEntityID, data domain.CategoriaInput) (*domain.CategoriaDto, error) {
+func (c *CategoriasUseCase) Update(id *vo.UniqueEntityID, data domain.CategoriaInput) (*domain.CategoriaDto, *Error) {
 	categoria, err := c.CategoriaRepositoryContract.FindById(id)
 	if err != nil {
 		return nil, err
+	}
+
+	usuarioId, err := vo.NewUniqueEntityID(data.UsuarioID)
+	if err != nil {
+		return nil, err
+	}
+
+	if !categoria.UsuarioID.Equals(usuarioId) {
+		return nil, NewError(http.StatusUnauthorized, e.ErrUsuarioUnauthorized, "")
 	}
 
 	if err := categoria.Fill(data); err != nil {
