@@ -6,15 +6,18 @@ import (
 	"net/http"
 )
 
+type Description string
+
 type Error interface {
 	Error() string
 	Status() int
+	GetDescription() string
 }
 
 type errorHandle struct {
-	Code        int       `json:"code"`
-	Message     string    `json:"message"`
-	Description *string   `json:"description,omitempty"`
+	Code        int       `json:"Code"`
+	Message     string    `json:"Message"`
+	Description *string   `json:"Description,omitempty"`
 	Fields      *[]string `json:"fields,omitempty"`
 }
 
@@ -24,6 +27,14 @@ func (e errorHandle) Error() string {
 
 func (e errorHandle) Status() int {
 	return e.Code
+}
+
+func (e errorHandle) GetDescription() string {
+	if e.Description != nil {
+		return *e.Description
+	}
+
+	return ""
 }
 
 func NewError(code int, message string, description string) *errorHandle {
