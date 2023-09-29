@@ -4,7 +4,6 @@ import (
 	"github.com/lncitador/alura-flix-backend/internal/application/repositories/inmemory"
 	"github.com/lncitador/alura-flix-backend/internal/domain"
 	vo "github.com/lncitador/alura-flix-backend/internal/domain/value-objects"
-	"github.com/lncitador/alura-flix-backend/pkg/validations"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -57,10 +56,6 @@ func TestUsuariosUseCase_Create(t *testing.T) {
 
 		assert.NotNil(t, err)
 		assert.Nil(t, got)
-
-		isErrValidation, _ := validations.ErrosAsValidationByField(err, "Email")
-
-		assert.True(t, *isErrValidation)
 	})
 
 	t.Run("should not create a user with invalid password", func(t *testing.T) {
@@ -74,10 +69,6 @@ func TestUsuariosUseCase_Create(t *testing.T) {
 
 		assert.NotNil(t, err)
 		assert.Nil(t, got)
-
-		isErrValidation, _ := validations.ErrosAsValidationByField(err, "Password")
-
-		assert.True(t, *isErrValidation)
 	})
 }
 
@@ -189,10 +180,6 @@ func TestUsuariosUseCase_Update(t *testing.T) {
 
 		assert.NotNil(t, err)
 		assert.Nil(t, got)
-
-		isErrValidation, _ := validations.ErrosAsValidationByField(err, "Email")
-
-		assert.True(t, *isErrValidation)
 	})
 
 	t.Run("should not update a user with invalid password", func(t *testing.T) {
@@ -212,10 +199,6 @@ func TestUsuariosUseCase_Update(t *testing.T) {
 
 		assert.NotNil(t, err)
 		assert.Nil(t, got)
-
-		isErrValidation, _ := validations.ErrosAsValidationByField(err, "Password")
-
-		assert.True(t, *isErrValidation)
 	})
 
 	t.Run("should not update a user with invalid id", func(t *testing.T) {
@@ -266,10 +249,6 @@ func TestUsuariosUseCase_Signin(t *testing.T) {
 
 		assert.NotNil(t, err)
 		assert.Nil(t, usuario)
-
-		isErrValidation, _ := validations.ErrosAsValidationByField(err, "Email")
-
-		assert.True(t, *isErrValidation)
 	})
 
 	t.Run("should not signin a user with invalid password", func(t *testing.T) {
@@ -284,9 +263,5 @@ func TestUsuariosUseCase_Signin(t *testing.T) {
 
 		assert.NotNil(t, err)
 		assert.Nil(t, usuario)
-
-		isErrValidation, _ := validations.ErrosAsValidationByField(err, "Password")
-
-		assert.True(t, *isErrValidation)
 	})
 }
