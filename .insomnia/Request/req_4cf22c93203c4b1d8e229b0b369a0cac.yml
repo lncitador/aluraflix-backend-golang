@@ -1,0 +1,24 @@
+_id: req_4cf22c93203c4b1d8e229b0b369a0cac
+type: Request
+parentId: fld_d7ace4ef43da4b2fbeab7435b0402d1a
+modified: 1695951139665
+created: 1695950896826
+url: "{{ _.base_url }}/{{ _.api_v1
+  }}/categorias/47d14df5-ec56-48d0-b56a-af5af942f684"
+name: Delete categoria
+description: ""
+method: DELETE
+body: {}
+parameters: []
+headers:
+  - name: User-Agent
+    value: Insomnia/2023.5.7
+authentication: {}
+metaSortKey: -1695927732598.25
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

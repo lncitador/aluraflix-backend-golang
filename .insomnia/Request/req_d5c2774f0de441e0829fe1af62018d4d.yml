@@ -1,0 +1,23 @@
+_id: req_d5c2774f0de441e0829fe1af62018d4d
+type: Request
+parentId: fld_269004949b6d4a689f53ae02b532fe61
+modified: 1695950282883
+created: 1695928368678
+url: "{{ _.base_url }}/{{ _.api_v1 }}/videos?page=1"
+name: List all videos
+description: ""
+method: GET
+body: {}
+parameters: []
+headers:
+  - name: User-Agent
+    value: Insomnia/2023.5.7
+authentication: {}
+metaSortKey: -1695928368678
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

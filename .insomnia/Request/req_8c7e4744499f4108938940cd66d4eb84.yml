@@ -1,0 +1,31 @@
+_id: req_8c7e4744499f4108938940cd66d4eb84
+type: Request
+parentId: fld_d7ace4ef43da4b2fbeab7435b0402d1a
+modified: 1695940165496
+created: 1695934089566
+url: "{{ _.base_url }}/{{ _.api_v1 }}/categorias"
+name: Create categoria
+description: ""
+method: POST
+body:
+  mimeType: application/json
+  text: |-
+    {
+    	"name": "Aulas Python",
+    	"color": "#00f000"
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+  - name: User-Agent
+    value: Insomnia/2023.5.7
+authentication: {}
+metaSortKey: -1695927944691.5
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

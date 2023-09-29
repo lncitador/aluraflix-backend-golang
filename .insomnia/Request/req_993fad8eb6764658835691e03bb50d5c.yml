@@ -1,0 +1,32 @@
+_id: req_993fad8eb6764658835691e03bb50d5c
+type: Request
+parentId: fld_1136ce54bba24e5daaae9c6b4c29c438
+modified: 1695935512365
+created: 1695927520705
+url: "{{ _.base_url }}/{{ _.api_v1 }}/auth/signup"
+name: Sign Up
+description: ""
+method: POST
+body:
+  mimeType: application/json
+  text: |-
+    {
+    	"name": "Marie Joe",
+    	"email": "joemae@test.com",
+    	"password": "123456"
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+  - name: User-Agent
+    value: Insomnia/2023.5.7
+authentication: {}
+metaSortKey: -1695927520705
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

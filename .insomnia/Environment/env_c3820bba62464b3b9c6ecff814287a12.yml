@@ -1,0 +1,18 @@
+_id: env_c3820bba62464b3b9c6ecff814287a12
+type: Environment
+parentId: env_e7e44b5d9c9c6f084b561fc813d3051f6aeb53ac
+modified: 1695935345236
+created: 1695927528383
+name: Development
+data:
+  base_url: http://localhost:4001
+  api_v1: api/v1
+  usuario_id: 9ab3641f-26d2-4f56-bbda-5fba1801a094
+dataPropertyOrder:
+  "&":
+    - base_url
+    - api_v1
+    - usuario_id
+color: "#e26a6a"
+isPrivate: false
+metaSortKey: 1695927528383
