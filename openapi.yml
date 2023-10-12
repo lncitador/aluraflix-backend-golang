@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: Alura Flix
-  description: API de vídeos da Alura
+  description: API de vídeos da Alura feita em Go com Gin e GORM + PostgresQL
   version: 1.0.0
   contact:
     name: Walaff Fernandes
